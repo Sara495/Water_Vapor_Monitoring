@@ -1121,7 +1121,7 @@ def update_tropo_series(selected_dropdown_value,selected_range,selectData):
     fig_tropo.update_xaxes(gridcolor='#2D2D2D', gridwidth=0.2,row=1, col=1)
     fig_tropo.update_xaxes(gridcolor='#2D2D2D', gridwidth=0.2,row=2, col=1)
     fig_tropo.update_yaxes(title_text="[mbar]",gridcolor='#2D2D2D',gridwidth=0.2,zeroline=False, row=1, col=1)
-    fig_tropo.update_yaxes(title_text="[Â°C]",gridcolor='#2D2D2D',gridwidth=0.2,zeroline=False, row=2, col=1)
+    fig_tropo.update_yaxes(title_text="[°C]",gridcolor='#2D2D2D',gridwidth=0.2,zeroline=False, row=2, col=1)
     fig_tropo.update_yaxes(title_text="[%]", gridcolor='#2D2D2D',gridwidth=0.2,zeroline=False,row=3, col=1)
     fig_tropo['layout'].update(height=600,paper_bgcolor  ='#111111',plot_bgcolor='#111111', font={'color':'#7FDBFF'},
                margin= {
@@ -1165,7 +1165,7 @@ def update_tropo_series(selected_dropdown_value,selected_range,selectData):
               'xanchor': 'center',
               'x': 0.5,
               'xref': 'paper',
-              'font' :{'size':15, 'color' : '#ff6600'}
+              'font' :{'size':15, 'color' : '#7FDBFF'}
               },
             xaxis={'title': 'Date', 'automargin':True},
             hovermode='closest',
@@ -1576,7 +1576,7 @@ def update_coord_series(selected_dropdown_value,values,ref,selected_range,select
               'xanchor': 'center',
               'x': 0.5,
               'xref': 'paper',
-              'font' :{'size':15, 'color' : '#ff6600'}
+              'font' :{'size':15, 'color' : '#7FDBFF'}
               },
             xaxis={'title': 'Date', 'automargin':True},
             yaxis={'title': '[m]', 'rangemode':'nonnegative'},

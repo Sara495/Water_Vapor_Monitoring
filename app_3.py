@@ -22,6 +22,7 @@ import sys
 import pyproj
 from dateutil.relativedelta import relativedelta
 import time
+import base64
 
 # DATA VISUALIZATION WITH RATES INTEGRATED
 
@@ -172,14 +173,23 @@ def extract_y_axis_values(df,name_rec,param,rate_val,value_param,start_index,end
     y= df["%s"%name_rec+"_"+param+'_'+str(rate_val)].loc[start_index:end_index][value_param]
     return y
 
+logo_gred = '/Users/saramaffioli/Documents/GitHub/Water_Vapor_Monitoring/GReD_logo.png' # replace with your own image
+encoded_image_gred = base64.b64encode(open(logo_gred, 'rb').read())
+logo_polimi = '/Users/saramaffioli/Documents/GitHub/Water_Vapor_Monitoring/poli_logo.png' # replace with your own image
+encoded_image_polimi = base64.b64encode(open(logo_polimi, 'rb').read())
 
 # Set the layout of the page
 app.layout = html.Div([
-
+    html.Div([
+      html.Img(src='data:image/png;base64,{}'.format(encoded_image_polimi.decode()), 
+      style={'float': 'left','padding':'0 0 0 100px'}),
+      html.Img(src='data:image/png;base64,{}'.format(encoded_image_gred.decode()), 
+      style={'float': 'right', 'padding':'0 100px 0 0'}),
     #Title
-    html.H1( 'Water Vapor Monitoring',
-    	style={'textAlign': 'center','color': '#FF6400','padding':'20px 0 50px 0','background-color':'#FF9966','height':20,'font-style': 'oblique'}
-    ),
+      html.H1( 'LAMPO Water Vapor Monitoring',
+      style={'textAlign': 'center','color': '#004876','padding':'20px 0 50px 200px','background-color':'#50D2FF','height':20,'font-style': 'oblique'}
+    )
+    ]),
 
     html.Div([
       # START MAP + TABLE
@@ -356,7 +366,7 @@ def update_rangeslider(selected_dropdown_value,selectData,rate_val):
 
       min_val=df_tropo["%s"%selectData['points'][sd]['text']+"_ZTD_"+str(rate_val)]['date'].min().month
       max_val=df_tropo["%s"%selectData['points'][sd]['text']+"_ZTD_"+str(rate_val)]['date'].max().month
-      marks_val = {date.month:{'label':"%s"%date.strftime("%B")+" "+str(date.year),'style':{'color':'#ff6600','font-size':'120%','font-weight': 'bold'}} for date in df_tropo["%s"%selectData['points'][sd]['text']+"_ZTD_"+str(rate_val)]['date'].dt.date.unique()}
+      marks_val = {date.month:{'label':"%s"%date.strftime("%B")+" "+str(date.year),'style':{'color':'white','font-size':'120%','font-weight': 'bold'}} for date in df_tropo["%s"%selectData['points'][sd]['text']+"_ZTD_"+str(rate_val)]['date'].dt.date.unique()}
 
       value = [min_val,max_val]
       marks = marks_val
@@ -370,7 +380,7 @@ def update_rangeslider(selected_dropdown_value,selectData,rate_val):
     for rec in selected_dropdown_value:
       min_val=df_tropo["%s"%rec+"_ZTD_"+str(rate_val)]['date'].min().month
       max_val=df_tropo["%s"%rec+"_ZTD_"+str(rate_val)]['date'].max().month
-      marks_val = {date.month:{'label':"%s"%date.strftime("%B")+" "+str(date.year),'style':{'color':'#ff6600','font-size':'120%','font-weight': 'bold'}} for date in df_tropo["%s"%rec+"_ZTD_"+str(rate_val)]['date'].dt.date.unique()}
+      marks_val = {date.month:{'label':"%s"%date.strftime("%B")+" "+str(date.year),'style':{'color':'white','font-size':'120%','font-weight': 'bold'}} for date in df_tropo["%s"%rec+"_ZTD_"+str(rate_val)]['date'].dt.date.unique()}
 
     value = [min_val,max_val]
     marks = marks_val
@@ -381,7 +391,7 @@ def update_rangeslider(selected_dropdown_value,selectData,rate_val):
     min_val = 0
     max_val = 0
     value = []
-    marks = {0:{'label': 'Select a receiver', 'style':{'color':'#ff6600','font-size':'120%','font-weight': 'bold'} }}
+    marks = {0:{'label': 'Select a receiver', 'style':{'color':'white','font-size':'120%','font-weight': 'bold'} }}
     return min_val,max_val,value,marks
 
 
@@ -444,14 +454,14 @@ def update_time_series(selected_dropdown_value,selected_type,selected_range,sele
         'data': trace,
         'layout': go.Layout(
               title= {
-              'text': '<b>{}</b>  {}'.format(selectData['points'][sd]['text'], tropo_type),
+              'text': 'TROPOSPHERIC DELAYS',
               'xanchor': 'center',
               'yanchor': 'bottom',
               'x': 0.5,
               'y': 1,
               'xref': 'paper',
               'yref': 'paper',
-              'font' :{'size':15, 'color' : '#ff6600'}
+              'font' :{'size':15, 'color' : '#7FDBFF'}
               },
               xaxis={'title': 'Date', 'automargin':True},
               yaxis={'title': '[cm]', 'rangemode':'nonnegative'},
@@ -486,7 +496,7 @@ def update_time_series(selected_dropdown_value,selected_type,selected_range,sele
               'y': 1,
               'xref': 'paper',
               'yref': 'paper',
-              'font' :{'size':15, 'color' : '#ff6600'}
+              'font' :{'size':15, 'color' : '#7FDBFF'}
               },
             xaxis={'title': 'Date', 'automargin':True},
             yaxis={'title': '[cm]', 'rangemode':'nonnegative'},
@@ -559,14 +569,14 @@ def update_time_series(selected_dropdown_value,selected_type,selected_range,sele
         'data': trace,
         'layout': go.Layout(
             title= {
-              'text': '<b>{}</b>  {}'.format(rec, tropo_type),
+              'text': 'TROPOSPHERIC DELAYS',
               'xanchor': 'center',
               'yanchor': 'bottom',
               'x': 0.5,
               'y': 1,
               'xref': 'paper',
               'yref': 'paper',
-              'font' :{'size':15, 'color' : '#ff6600'}
+              'font' :{'size':15, 'color' : '#7FDBFF'}
               },
               xaxis={'title': 'Date', 'automargin':True},
               yaxis={'title': '[cm]', 'rangemode':'nonnegative'},
@@ -602,7 +612,7 @@ def update_time_series(selected_dropdown_value,selected_type,selected_range,sele
               'y': 1,
               'xref': 'paper',
               'yref': 'paper',
-              'font' :{'size':15, 'color' : '#ff6600'}
+              'font' :{'size':15, 'color' : '#7FDBFF'}
               },
             xaxis={'title': 'Date', 'automargin':True},
             yaxis={'title': '[cm]', 'rangemode':'nonnegative'},
@@ -635,7 +645,7 @@ def update_time_series(selected_dropdown_value,selected_type,selected_range,sele
               'y': 1,
               'xref': 'paper',
               'yref': 'paper',
-              'font' :{'size':15, 'color' : '#ff6600'}
+              'font' :{'size':15, 'color' : '#7FDBFF'}
               },
             xaxis={'title': 'Date', 'automargin':True},
             yaxis={'title': '[cm]', 'rangemode':'nonnegative'},
@@ -696,7 +706,8 @@ def update_pwv_series(selected_dropdown_value,selected_range,selectData,rate_val
           mode = 'lines+text',
           text = 'No data available',
           textposition = 'middle center',
-          textfont = {'color': '#ff5050', 'size':35}
+          textfont = {'color': '#ff5050', 'size':35},
+          name= "%s"%selectData['points'][sd]['text']+"_PWV"
         ))
       else:
         trace_pwv.append(go.Scatter(
@@ -709,14 +720,14 @@ def update_pwv_series(selected_dropdown_value,selected_range,selectData,rate_val
       'data': trace_pwv,
       'layout': go.Layout(
             title= {
-              'text': '<b>{}</b>  PWV'.format(selectData['points'][sd]['text'],),
+              'text':  'PWV',
               'xanchor': 'center',
               'yanchor': 'bottom',
               'x': 0.5,
               'y': 1,
               'xref': 'paper',
               'yref': 'paper',
-              'font' :{'size':15, 'color' : '#ff6600'}
+              'font' :{'size':15, 'color' : '#7FDBFF'}
               },
             xaxis={'title': 'Date', 'automargin':True},
             yaxis={'title': '[mm]', 'rangemode':'nonnegative'},
@@ -773,14 +784,14 @@ def update_pwv_series(selected_dropdown_value,selected_range,selectData,rate_val
       'data': trace_pwv,
       'layout': go.Layout(
             title= {
-              'text': '<b>{}</b>  PWV'.format(rec,),
+              'text': 'PWV',
               'xanchor': 'center',
               'yanchor': 'bottom',
               'x': 0.5,
               'y': 1,
               'xref': 'paper',
               'yref': 'paper',
-              'font' :{'size':15, 'color' : '#ff6600'}
+              'font' :{'size':15, 'color' : '#7FDBFF'}
               },
             xaxis={'title': 'Date', 'automargin':True},
             yaxis={'title': '[mm]', 'rangemode':'nonnegative'},
@@ -813,7 +824,7 @@ def update_pwv_series(selected_dropdown_value,selected_range,selectData,rate_val
               'y': 1,
               'xref': 'paper',
               'yref': 'paper',
-              'font' :{'size':15, 'color' : '#ff6600'}
+              'font' :{'size':15, 'color' : '#7FDBFF'}
               },
             xaxis={'title': 'Date', 'automargin':True},
             yaxis={'title': '[mm]', 'rangemode':'nonnegative'},
@@ -845,12 +856,12 @@ def update_map(style_layer):
             "<b>Receiver: %{text}<br>"
             ,
     marker = {
-      'color' : '#ff6600',
+      'color' : '#7FDBFF',
       'size': 20
     },
     selected = {
     'marker': {
-    'color' : '#00ffff'
+    'color' : '#FF0EAF'
     }
     }
     )
@@ -928,7 +939,7 @@ def update_map(style_layer):
   dash.dependencies.Input('rate','value')])
 def update_tropo_series(selected_dropdown_value,selected_range,selectData,rate_val):
   fig_tropo = make_subplots(rows=3, cols=1, specs=[[{}], [{}],[{}]],shared_xaxes=True,vertical_spacing=0.08,row_width=[15, 15, 15],
-    subplot_titles=("Pressure","Temperature","Humidity"))
+    subplot_titles=("PRESSURE","TEMPERATURE","HUMIDITY"))
   start_date=""
   end_date=""
   start_index=""
@@ -1177,7 +1188,7 @@ def update_tropo_series(selected_dropdown_value,selected_range,selectData,rate_v
               'xanchor': 'center',
               'x': 0.5,
               'xref': 'paper',
-              'font' :{'size':15, 'color' : '#ff6600'}
+              'font' :{'size':15, 'color' : '#7FDBFF'}
               },
             xaxis={'title': 'Date', 'automargin':True},
             hovermode='closest',
@@ -1592,7 +1603,7 @@ def update_coord_series(selected_dropdown_value,values,ref,selected_range,select
               'xanchor': 'center',
               'x': 0.5,
               'xref': 'paper',
-              'font' :{'size':15, 'color' : '#ff6600'}
+              'font' :{'size':15, 'color' : '#7FDBFF'}
               },
             xaxis={'title': 'Date', 'automargin':True},
             yaxis={'title': '[m]', 'rangemode':'nonnegative'},
@@ -1625,9 +1636,9 @@ def update_table(selected_dropdown_value,selectData):
       print(sd)
     trace_table = go.Table(
     header={"values": value_header, "height": 35,
-              "line": {"width": 2, "color": "#ff6600"},"fill":{'color':'white'}, "font": {"size": 15}},
-    cells={"values": [col_d,col_a,col_o],'fill':{'color':'white'},  "line": {"color": "#ff6600"}})
-    figure_table = {'data': [trace_table], 'layout':go.Layout(plot_bgcolor='#111111',paper_bgcolor  ='#111111',font={'color':'#ff6600'},
+              "line": {"width": 2, "color": "#7FDBFF"},"fill":{'color':'#111111'}, "font": {"size": 15}},
+    cells={"values": [col_d,col_a,col_o],'fill':{'color':'#111111'},  "line": {"color": "#7FDBFF"}})
+    figure_table = {'data': [trace_table], 'layout':go.Layout(plot_bgcolor='#111111',paper_bgcolor  ='#111111',font={'color':'#7FDBFF'},
               margin= {
                 'l': 30,
                 'r': 10,
@@ -1643,9 +1654,9 @@ def update_table(selected_dropdown_value,selectData):
       col_o.append(ggm_table[ggm_table['short_name_4ch']==rec]['observer'])
     trace_table = go.Table(
       header={"values": value_header,"height": 35,
-                "line": {"width": 2, "color": "#ff6600"},"fill":{'color':'white'}, "font": {"size": 15}},
-      cells={"values": [col_d,col_a,col_o],'fill':{'color':'white'},  "line": {"color": "#ff6600"}})
-    figure_table = {'data': [trace_table], 'layout':go.Layout( plot_bgcolor='#111111',paper_bgcolor  ='#111111',font={'color':'#ff6600'},
+                "line": {"width": 2, "color": "#7FDBFF"},"fill":{'color':'#111111'}, "font": {"size": 15}},
+      cells={"values": [col_d,col_a,col_o],'fill':{'color':'#111111'},  "line": {"color": "#7FDBFF"}})
+    figure_table = {'data': [trace_table], 'layout':go.Layout( plot_bgcolor='#111111',paper_bgcolor  ='#111111',font={'color':'#7FDBFF'},
               margin= {
                 'l': 30,
                 'r': 10,
@@ -1656,8 +1667,8 @@ def update_table(selected_dropdown_value,selectData):
   else:
     trace_table = go.Table(
       header={"values": value_header,"height": 35,
-                "line": {"width": 2, "color": "#ff6600"},"fill":{'color':'white'}, "font": {"size": 15}})
-    figure_table = {'data': [trace_table],'layout':go.Layout(title='Please select a receiver', plot_bgcolor='#111111',paper_bgcolor  ='#111111',font={'color':'#ff6600'},
+                "line": {"width": 2, "color": "#7FDBFF"},"fill":{'color':'#111111'}, "font": {"size": 15}})
+    figure_table = {'data': [trace_table],'layout':go.Layout(title='Please select a receiver', plot_bgcolor='#111111',paper_bgcolor  ='#111111',font={'color':'#7FDBFF'},
               margin= {
                 'l': 30,
                 'r': 10,

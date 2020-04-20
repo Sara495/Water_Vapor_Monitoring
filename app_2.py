@@ -159,9 +159,9 @@ def extract_y_axis_values(df,name_rec,param,value_param,start_index,end_index):
     return y
 
 
-logo_gred = '/Users/saramaffioli/Desktop/dash/GReD_logo.png' # replace with your own image
+logo_gred = './logos/GReD_logo.png' # replace with your own image
 encoded_image_gred = base64.b64encode(open(logo_gred, 'rb').read())
-logo_polimi = '/Users/saramaffioli/Desktop/dash/poli_logo.png' # replace with your own image
+logo_polimi = './logos/poli_logo.png' # replace with your own image
 encoded_image_polimi = base64.b64encode(open(logo_polimi, 'rb').read())
 
     

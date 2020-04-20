@@ -140,15 +140,10 @@ colors = {
     'text': '#7FDBFF'
 }
 
-# Convert from unix time into datetime and create a new column 'date' for each dataframe with converted time
-#for key in df_tropo.items():
-#    df_tropo[key[0]]['date']=pd.to_datetime(df_tropo[key[0]]['epoch_time'],unit='s')
-#for key in df_pos.items():
-#    df_pos[key[0]]['date']=pd.to_datetime(df_pos[key[0]]['pos_time'],unit='s')
 
 # Function that extracts the indeces of the dataframe of interest to be used as condition
 #for the extraction of the axis values in the extract values funcion
-#parameters are df=name of the dataframe, param=tropo param,time_param=time column of the dataframe
+#parameters are df=name of the dataframe, param=tropo param,rate_vale= sample rate, time_param=time column of the dataframe
 #start_date,end_date= boundaries of the rangeslider
 start=time.time()
 def extract_index(df,name_rec,param,rate_val,time_param,start_date,end_date):
@@ -162,7 +157,7 @@ end=time.time()
 print('total extract index time is {}'.format(end-start))
 
 # Function that extracts the axis values, respectively time and value
-#parameters are df=name of the dataframe, param=tropo param,time_param=time column of the dataframe
+#parameters are df=name of the dataframe, param=tropo param,rate_vale= sample rate,time_param=time column of the dataframe
 #value_param= y axis variable, start_index,end_index= boundaries of the rangeslider
 def extract_x_axis_values(df,name_rec,param,rate_val,time_param,start_index,end_index):
     # return epoch time for time axis
@@ -173,9 +168,9 @@ def extract_y_axis_values(df,name_rec,param,rate_val,value_param,start_index,end
     y= df["%s"%name_rec+"_"+param+'_'+str(rate_val)].loc[start_index:end_index][value_param]
     return y
 
-logo_gred = '/Users/saramaffioli/Documents/GitHub/Water_Vapor_Monitoring/GReD_logo.png' # replace with your own image
+logo_gred = './logos/GReD_logo.png' # replace with your own image
 encoded_image_gred = base64.b64encode(open(logo_gred, 'rb').read())
-logo_polimi = '/Users/saramaffioli/Documents/GitHub/Water_Vapor_Monitoring/poli_logo.png' # replace with your own image
+logo_polimi = './logos/poli_logo.png' # replace with your own image
 encoded_image_polimi = base64.b64encode(open(logo_polimi, 'rb').read())
 
 # Set the layout of the page

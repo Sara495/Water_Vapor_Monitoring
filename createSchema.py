@@ -48,7 +48,7 @@ def remove_median_coord():
 # remove trend for each receiver to prepare dataset for outlier remover
 def remove_median_tropo():
   # create an array with lenght equal to the # of receivers to store the values of the 
-  # coordinates in the three directions, and a list for the rec name
+  # tropospheric delays ztd, zwd, and a list for the rec name
   for i in range(len(rec_array[0,:])):
   # create a zero array of arrays with same length of epoch values, and
   # dimension equal to the # of receivers

@@ -41,6 +41,79 @@ In case of problems related to the Colorama package version install as:
 ```
 pip3 install colorama==0.4.3
 ```
+### Installing
+### Creation of the database
+
+Run pgAdmin4 application.
+To create the database is needed to have installed a server with PostgreSQL with user name postgres and password user, and create a database called db. Check the file dbConfig.txt and set the database name, the user and the password in case is preferable to change those parameters.  
+Open the pg_hba.conf file with administrator permission and change "peer" to "md5" on the line concerning "all" other users:
+
+> local      all     all  <s>peer</s> md5 
+
+In Linux Debian in case of password problem set also only the first line DB admin login as:
+
+> local      all     postgres     trust 
+
+The file can be opened with the following commands:
+```
+sudo vim /etc/postgresql/12/main/pg_hba.conf``` 
+```
+Or:
+```
+sudo nano /etc/postgresql/12/main/pg_hba.conf
+```
+On Mac:
+```
+sudo su , vim /Library/PostgreSQL/12/data/pg_hba.conf
+```
+
+Using vim: 
+Edit like pressing ``` i```, then Exit saving``` :wq!```or without saving```:qa!```. 
+ 
+Using nano commands edit the file then press ``` Ctrl+o ,  Enter ,  Ctrl+x ```.
+
+Then restart: 
+```
+sudo /etc/init.d/postgresql reload
+```
+On Mac:
+``` 
+pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log restart
+```
+where */usr/local/var/postgres is the location of the database storage area*, and */usr/local/var/postgres/server.log* is my log file for postgres.
+
+Then from the terminal:
+```
+sudo -u postgres psql postgres
+```
+```
+\password  postgres
+```
+``` 
+user
+```
+
+### Running
+
+If running the sripts for the first time or any edit to the script createSchema.py, before running it launches the script create_base_schema.py with the following command:
+```
+python3 create_base_schema.py 
+```
+To run the scripts download the .ZIP file from the repository and edit the path to the input folder in the createSchema.py file at line 181  ```input_folder = r'/path to… /input/' ``` . 
+
+Run the file createSchema.py to create the database with PostgreSQL using the following instruction in the terminal:
+```
+python3 createSchema.py
+```
+To run the webpage:
+Start the webpage application by typing in the terminal:
+```
+python3 app_3.py
+```
+
+To open as HTML page: ```page.html```.
+
+
 
 
 

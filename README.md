@@ -1,5 +1,5 @@
-# Water_Vapor_Monitoring
-Water Vapor Monitoring is an analytic dashboard aimed to the visualization and analysis of GNSS time series for the improvement of weather forecast. 
+# Water Vapor Monitoring Dashboard
+Water Vapor Monitoring is an analytic dashboard aimed to the visualization and analysis of tropospheric delays, coordinates and weather time series from GNSS measurements for the improvement of weather forecasts. 
 It is currently developed for Linux and OS.
 
 ## Getting Started

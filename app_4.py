@@ -354,8 +354,9 @@ def update_rangeslider(selected_dropdown_value,selectData,rate_val):
       max_val=df_tropo["%s"%selectData['points'][sd]['text']+"_ZTD_"+str(rate_val)]['date'].max().month
       marks_val = {date.month:{'label':"%s"%date.strftime("%B")+" "+str(date.year),'style':{'color':'white','font-size':'120%','font-weight': 'bold'}} for date in df_tropo["%s"%selectData['points'][sd]['text']+"_ZTD_"+str(rate_val)]['date'].dt.date.unique()}
 
-      value = [min_val,max_val]
+      #value = [min_val,max_val]
       marks = marks_val
+      value= [max_val -1,max_val]
 
       return min_val,max_val,value,marks
 
@@ -368,8 +369,9 @@ def update_rangeslider(selected_dropdown_value,selectData,rate_val):
       max_val=df_tropo["%s"%rec+"_ZTD_"+str(rate_val)]['date'].max().month
       marks_val = {date.month:{'label':"%s"%date.strftime("%B")+" "+str(date.year),'style':{'color':'white','font-size':'120%','font-weight': 'bold'}} for date in df_tropo["%s"%rec+"_ZTD_"+str(rate_val)]['date'].dt.date.unique()}
 
-    value = [min_val,max_val]
+    #value = [min_val,max_val]
     marks = marks_val
+    value= [max_val -1,max_val]
 
     return min_val,max_val,value,marks
   # If no receiver has been selected

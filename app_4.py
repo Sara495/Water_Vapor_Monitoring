@@ -23,7 +23,7 @@ import pyproj
 from dateutil.relativedelta import relativedelta
 import time
 import base64
-
+from datetime import date
 # DATA VISUALIZATION WITH RATES INTEGRATED
 
 mapbox_access_token = open("mapbox_token.txt").read()
@@ -203,9 +203,50 @@ app.layout = html.Div([
           dcc.Graph(
             id='map'
           )],type="circle")
-          ],style={'backgroundColor': colors['background'],'textAlign': 'left','color': colors['text'],'padding':'20px 0 0px 50px'},open=True)
+          ],style={'backgroundColor': colors['background'],'textAlign': 'left','color': colors['text'],'padding':'20px 0 0px 50px'},open=True),
+      html.Div([
+        html.Details([
+          html.Summary('Download'),
+            html.Div([
+              html.Summary('Select input for the download'),
 
+                dcc.Dropdown(
+                  id='down_rec',
+                  multi=True,
+                  placeholder="Select one or more receivers",
+                  options=[{'label': i, 'value': i} for i in receivers],
+                  style={'width':'60%'}
+                ),
+                dcc.Dropdown(
+                  id='down_param',
+                  multi=True,
+                  placeholder="Select one or more parameters",
+                  options=[{'label': i, 'value': i} for i in ['ZWD', 'ZTD', 'ZHD']],
+                  style={'width':'60%'}
+                ),
+                dcc.Dropdown(
+                  id='down_timestamp',
+                  placeholder="Select one timestamp",
+                  options=[{'label': i, 'value': i} for i in ['5min', '1min', '30sec']],
+                  style={'width':'60%'}
+                ),
+                html.Div(id='output-container-param')
+          ],),
 
+          html.Div([
+            html.Summary('Date'),
+              dcc.DatePickerRange(
+                id='my-date-picker-range',
+                #end_date=date(2017,6,21),
+                display_format='MMM Do, YY',
+                start_date_placeholder_text='MMM Do, YY'
+       
+              ),
+            html.Div(id='output-container-date-picker-range')
+          ]),
+       html.A('Download CSV', id = 'my-link'),
+      ],style={'backgroundColor': colors['background'],'textAlign': 'left','color': colors['text'],'padding':'20px 0 0px 50px'}), ]),
+      
       ],style={'textAlign': 'center','color': colors['text'],'display':'inline-block','padding':'0px 20px 0 0'}),
       # END MAP
 
@@ -322,7 +363,29 @@ app.layout = html.Div([
     ])
 ], style={'backgroundColor': colors['background']})
 
+# def filter_data(value):
+#     if value == 'all':
+#         return df
+#     else:
+#         return df[df['c'] == value]
 
+
+# @app.callback(
+#     dash.dependencies.Output('table', 'children'),
+#     [dash.dependencies.Input('field-dropdown', 'value')])
+# def update_table(filter_value):
+#     dff = filter_data(filter_value)
+#     return generate_table(dff)
+
+
+# @app.callback(
+#     dash.dependencies.Output('download-link', 'href'),
+#     [dash.dependencies.Input('field-dropdown', 'value')])
+# def update_download_link(filter_value):
+#     dff = filter_data(filter_value)
+#     csv_string = dff.to_csv(index=False, encoding='utf-8')
+#     csv_string = "data:text/csv;charset=utf-8," + urllib.quote(csv_string)
+#     return csv_string
 
 # CALLSBACK
 # Loaders
@@ -1788,6 +1851,47 @@ def update_coord_series(selected_dropdown_value,values,ref,selected_range,select
     }
 
   return fig_coord
+
+# Callback download
+@app.callback(
+    dash.dependencies.Output('output-container-date-picker-range', 'children'),
+    [dash.dependencies.Input('my-date-picker-range', 'start_date'),
+     dash.dependencies.Input('my-date-picker-range', 'end_date')])
+def update_output_date(start_date, end_date):
+    string_prefix = 'You have selected: '
+    if start_date is not None:
+        start_date_object = date.fromisoformat(start_date)
+        start_date_string = start_date_object.strftime('%B %d, %Y')
+        string_prefix = string_prefix + 'Start Date: ' + start_date_string + ' | '
+    if end_date is not None:
+        end_date_object = date.fromisoformat(end_date)
+        end_date_string = end_date_object.strftime('%B %d, %Y')
+        string_prefix = string_prefix + 'End Date: ' + end_date_string
+    if len(string_prefix) == len('You have selected: '):
+        return 'Please select initial and final date'
+    else:
+        return string_prefix
+
+@app.callback(
+    dash.dependencies.Output('output-container-param', 'children'),
+    [dash.dependencies.Input('down_rec', 'value'),
+     dash.dependencies.Input('down_param', 'value'),
+     dash.dependencies.Input('down_timestamp', 'value')])
+def update_output_param(d_rec, d_param, d_timestamp):
+    string_prefix = 'You have selected: '
+    string_rec = 'Receivers: '
+    string_param = 'Parameters: '
+    string_timestamp ='Timestamp: '
+
+    if d_rec is None or d_rec == [] or  d_param is None  or d_param == [] or d_timestamp is  None: 
+      return 'Please select all the required inputs'
+    else:
+      string_rec = string_rec + "%s"%d_rec + ' | '
+      string_param = string_param +"%s"%d_param + ' | '
+      string_timestamp = string_timestamp + "%s"%d_timestamp + ' | '
+      string_prefix = string_prefix + string_rec + string_param + string_timestamp  
+      return string_prefix
+
 
 
 

@@ -24,6 +24,8 @@ from dateutil.relativedelta import relativedelta
 import time
 import base64
 from datetime import date
+from dash_extensions import Download
+import io
 # DATA VISUALIZATION WITH RATES INTEGRATED
 
 mapbox_access_token = open("mapbox_token.txt").read()
@@ -221,7 +223,7 @@ app.layout = html.Div([
                   id='down_param',
                   multi=True,
                   placeholder="Select one or more parameters",
-                  options=[{'label': i, 'value': i} for i in ['ZWD', 'ZTD', 'ZHD']],
+                  options=[{'label': i, 'value': i} for i in ['ZWD', 'ZTD', 'ZHD', 'pos', 'PWV', 'HUMIDITY','TEMPERATURE','PRESSURE']],
                   style={'width':'60%'}
                 ),
                 dcc.Dropdown(
@@ -237,14 +239,12 @@ app.layout = html.Div([
             html.Summary('Date'),
               dcc.DatePickerRange(
                 id='my-date-picker-range',
-                #end_date=date(2017,6,21),
                 display_format='MMM Do, YY',
-                start_date_placeholder_text='MMM Do, YY'
-       
+                start_date_placeholder_text='MMM Do, YY' 
               ),
             html.Div(id='output-container-date-picker-range')
           ]),
-       html.A('Download CSV', id = 'my-link'),
+       html.Div([html.Button("Download csv", id="btn", n_clicks=0), Download(id="download")]),
       ],style={'backgroundColor': colors['background'],'textAlign': 'left','color': colors['text'],'padding':'20px 0 0px 50px'}), ]),
       
       ],style={'textAlign': 'center','color': colors['text'],'display':'inline-block','padding':'0px 20px 0 0'}),
@@ -363,29 +363,7 @@ app.layout = html.Div([
     ])
 ], style={'backgroundColor': colors['background']})
 
-# def filter_data(value):
-#     if value == 'all':
-#         return df
-#     else:
-#         return df[df['c'] == value]
 
-
-# @app.callback(
-#     dash.dependencies.Output('table', 'children'),
-#     [dash.dependencies.Input('field-dropdown', 'value')])
-# def update_table(filter_value):
-#     dff = filter_data(filter_value)
-#     return generate_table(dff)
-
-
-# @app.callback(
-#     dash.dependencies.Output('download-link', 'href'),
-#     [dash.dependencies.Input('field-dropdown', 'value')])
-# def update_download_link(filter_value):
-#     dff = filter_data(filter_value)
-#     csv_string = dff.to_csv(index=False, encoding='utf-8')
-#     csv_string = "data:text/csv;charset=utf-8," + urllib.quote(csv_string)
-#     return csv_string
 
 # CALLSBACK
 # Loaders
@@ -1891,6 +1869,51 @@ def update_output_param(d_rec, d_param, d_timestamp):
       string_timestamp = string_timestamp + "%s"%d_timestamp + ' | '
       string_prefix = string_prefix + string_rec + string_param + string_timestamp  
       return string_prefix
+
+
+@app.callback(
+    dash.dependencies.Output('download', 'data'),
+    [dash.dependencies.Input('down_rec', 'value'),
+     dash.dependencies.Input('down_param', 'value'),
+     dash.dependencies.Input('down_timestamp', 'value'),
+     dash.dependencies.Input('my-date-picker-range', 'start_date'),
+     dash.dependencies.Input('my-date-picker-range', 'end_date'),
+     dash.dependencies.Input("btn", "n_clicks")])
+def generate_csv(d_rec, d_param, d_timestamp, start_date, end_date, n_clicks):
+    changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
+    if 'btn' in changed_id:
+      if d_rec != None and d_param != None and d_timestamp != None :
+        print('the n_clicks has value {}'.format(n_clicks))  
+        if d_timestamp=='5min':
+          arg_t='300'
+        elif d_timestamp=='1min':
+          arg_t='60'
+        elif d_timestamp=='30sec':
+          arg_t='1'
+        for i in d_rec:
+        #for j in i:
+          arg_r=i
+          for a in d_param:
+            #for b in i:
+            arg_p=a
+            if a=='pos':
+              get_pos(arg_t)
+              arg =  "%s"%arg_r+'_'+arg_p+'_'+arg_t
+      # Convert data to a string.
+              s = io.StringIO() 
+              df_pos[arg].to_csv(s, index=False,encoding='utf-8', columns=['date','pos_x','pos_y','pos_z'])
+              content = s.getvalue()
+      # The output must follow this form for the download to work.
+              return dict(filename= "%s"%arg_r+'_'+arg_p+'_'+d_timestamp+'.csv', content=content, type="text/csv")
+            else: 
+              get_db(d_rec,arg_t)
+              arg =  "%s"%arg_r+'_'+arg_p+'_'+arg_t
+      # Convert data to a string.
+              s = io.StringIO() 
+              df_tropo[arg].to_csv(s, index=False,encoding='utf-8', columns=['date','data_val'])
+              content = s.getvalue()
+      # The output must follow this form for the download to work.
+              return dict(filename= "%s"%arg_r+'_'+arg_p+'_'+d_timestamp+'.csv', content=content, type="text/csv")
 
 
 

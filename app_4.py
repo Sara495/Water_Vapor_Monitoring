@@ -1897,10 +1897,8 @@ def generate_csv(d_rec, d_param, d_timestamp, d_start_date, d_end_date, n_clicks
         elif d_timestamp=='30sec':
           arg_t='1'
         for i in d_rec:
-        #for j in i:
           arg_r=i
           for a in d_param:
-            #for b in i:
             arg_p=a
             if a=='pos':
               get_pos(arg_t)
@@ -1923,15 +1921,6 @@ def generate_csv(d_rec, d_param, d_timestamp, d_start_date, d_end_date, n_clicks
       # The output must follow this form for the download to work.
               return dict(filename= "%s"%arg_r+'_'+arg_p+'_'+d_timestamp+'.csv', content=content, type="text/csv")
 
-# def extract_index(df,name_rec,param,rate_val,time_param,start_date,end_date):
-
-#   tmp_time = df["%s"%name_rec+"_"+param+'_'+str(rate_val)][time_param]
-#   start_index= df["%s"%name_rec+"_"+param+'_'+str(rate_val)].loc[(tmp_time>=start_date),[time_param]].index[0]
-#   end_index=df["%s"%name_rec+"_"+param+'_'+str(rate_val)].loc[(tmp_time<=end_date),[time_param]].index[-1]
-
-#   return start_index,end_index
-# start_index,end_index=extract_index(df_tropo,selected_dropdown_value[0],'ZTD',rate_val,'date',d_start_date,d_end_date)
-# dfRange = df[start:end]
 
 if __name__ == '__main__':
     app.run_server(debug=True)

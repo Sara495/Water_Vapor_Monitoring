@@ -1839,7 +1839,9 @@ def update_output_date(start_date, end_date):
     string_prefix = 'You have selected: '
     if start_date is not None:
         start_date_object = date.fromisoformat(start_date)
+        print('the start_date_object is {}'.format(start_date_object))
         start_date_string = start_date_object.strftime('%B %d, %Y')
+        print('the start_date_string is {}'.format(start_date_string))
         string_prefix = string_prefix + 'Start Date: ' + start_date_string + ' | '
     if end_date is not None:
         end_date_object = date.fromisoformat(end_date)
@@ -1879,7 +1881,11 @@ def update_output_param(d_rec, d_param, d_timestamp):
      dash.dependencies.Input('my-date-picker-range', 'start_date'),
      dash.dependencies.Input('my-date-picker-range', 'end_date'),
      dash.dependencies.Input("btn", "n_clicks")])
-def generate_csv(d_rec, d_param, d_timestamp, start_date, end_date, n_clicks):
+def generate_csv(d_rec, d_param, d_timestamp, d_start_date, d_end_date, n_clicks):
+    start_index_pos=""
+    end_index_pos=""
+    start_index_tropo=""
+    end_index_tropo=""
     changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
     if 'btn' in changed_id:
       if d_rec != None and d_param != None and d_timestamp != None :
@@ -1899,25 +1905,33 @@ def generate_csv(d_rec, d_param, d_timestamp, start_date, end_date, n_clicks):
             if a=='pos':
               get_pos(arg_t)
               arg =  "%s"%arg_r+'_'+arg_p+'_'+arg_t
+              start_index_pos,end_index_pos=extract_index(df_pos,arg_r,"%s"%arg_p,arg_t,'date',d_start_date,d_end_date)
       # Convert data to a string.
               s = io.StringIO() 
-              df_pos[arg].to_csv(s, index=False,encoding='utf-8', columns=['date','pos_x','pos_y','pos_z'])
+              df_pos[arg][start_index:end_index].to_csv(s, index=False,encoding='utf-8', columns=['date','pos_x','pos_y','pos_z'])
               content = s.getvalue()
       # The output must follow this form for the download to work.
               return dict(filename= "%s"%arg_r+'_'+arg_p+'_'+d_timestamp+'.csv', content=content, type="text/csv")
             else: 
               get_db(d_rec,arg_t)
               arg =  "%s"%arg_r+'_'+arg_p+'_'+arg_t
+              start_index_tropo,end_index_tropo=extract_index(df_tropo,arg_r,"%s"%arg_p,arg_t,'date',d_start_date,d_end_date)
       # Convert data to a string.
               s = io.StringIO() 
-              df_tropo[arg].to_csv(s, index=False,encoding='utf-8', columns=['date','data_val'])
+              df_tropo[arg][start_index_tropo:end_index_tropo].to_csv(s, index=False,encoding='utf-8', columns=['date','data_val'])
               content = s.getvalue()
       # The output must follow this form for the download to work.
               return dict(filename= "%s"%arg_r+'_'+arg_p+'_'+d_timestamp+'.csv', content=content, type="text/csv")
 
+# def extract_index(df,name_rec,param,rate_val,time_param,start_date,end_date):
 
+#   tmp_time = df["%s"%name_rec+"_"+param+'_'+str(rate_val)][time_param]
+#   start_index= df["%s"%name_rec+"_"+param+'_'+str(rate_val)].loc[(tmp_time>=start_date),[time_param]].index[0]
+#   end_index=df["%s"%name_rec+"_"+param+'_'+str(rate_val)].loc[(tmp_time<=end_date),[time_param]].index[-1]
 
-
+#   return start_index,end_index
+# start_index,end_index=extract_index(df_tropo,selected_dropdown_value[0],'ZTD',rate_val,'date',d_start_date,d_end_date)
+# dfRange = df[start:end]
 
 if __name__ == '__main__':
     app.run_server(debug=True)

@@ -26,6 +26,7 @@ import base64
 from datetime import date
 from dash_extensions import Download
 import io
+from pathlib import Path
 # DATA VISUALIZATION WITH RATES INTEGRATED
 
 mapbox_access_token = open("mapbox_token.txt").read()
@@ -169,6 +170,7 @@ def extract_y_axis_values(df,name_rec,param,rate_val,value_param,start_index,end
     # return values for y axes
     y= df["%s"%name_rec+"_"+param+'_'+str(rate_val)].loc[start_index:end_index][value_param]
     return y
+              
 
 logo_gred = './logos/GReD_logo.png' # replace with your own image
 encoded_image_gred = base64.b64encode(open(logo_gred, 'rb').read())
@@ -244,7 +246,7 @@ app.layout = html.Div([
               ),
             html.Div(id='output-container-date-picker-range')
           ]),
-       html.Div([html.Button("Download csv", id="btn", n_clicks=0), Download(id="download")]),
+       html.Div([html.Button("Download csv", id="btn", n_clicks=0), html.Div(id='output-container-download')]),
       ],style={'backgroundColor': colors['background'],'textAlign': 'left','color': colors['text'],'padding':'20px 0 0px 50px'}), ]),
       
       ],style={'textAlign': 'center','color': colors['text'],'display':'inline-block','padding':'0px 20px 0 0'}),
@@ -1874,7 +1876,7 @@ def update_output_param(d_rec, d_param, d_timestamp):
 
 
 @app.callback(
-    dash.dependencies.Output('download', 'data'),
+    dash.dependencies.Output('output-container-download', 'children'),
     [dash.dependencies.Input('down_rec', 'value'),
      dash.dependencies.Input('down_param', 'value'),
      dash.dependencies.Input('down_timestamp', 'value'),
@@ -1886,6 +1888,7 @@ def generate_csv(d_rec, d_param, d_timestamp, d_start_date, d_end_date, n_clicks
     end_index_pos=""
     start_index_tropo=""
     end_index_tropo=""
+    path_to_download_folder = str(os.path.join(Path.home(), "Downloads"))
     changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
     if 'btn' in changed_id:
       if d_rec != None and d_param != None and d_timestamp != None :
@@ -1896,31 +1899,40 @@ def generate_csv(d_rec, d_param, d_timestamp, d_start_date, d_end_date, n_clicks
           arg_t='60'
         elif d_timestamp=='30sec':
           arg_t='1'
+        print('the d_rec has value {}'.format(d_rec))  
         for i in d_rec:
-          arg_r=i
+          arg_r=str(i)
+          print('the i has value {}'.format(i))  
           for a in d_param:
             arg_p=a
             if a=='pos':
               get_pos(arg_t)
-              arg =  "%s"%arg_r+'_'+arg_p+'_'+arg_t
-              start_index_pos,end_index_pos=extract_index(df_pos,arg_r,"%s"%arg_p,arg_t,'date',d_start_date,d_end_date)
-      # Convert data to a string.
-              s = io.StringIO() 
-              df_pos[arg][start_index:end_index].to_csv(s, index=False,encoding='utf-8', columns=['date','pos_x','pos_y','pos_z'])
-              content = s.getvalue()
-      # The output must follow this form for the download to work.
-              return dict(filename= "%s"%arg_r+'_'+arg_p+'_'+d_timestamp+'.csv', content=content, type="text/csv")
+              arg =  arg_r+'_'+arg_p+'_'+arg_t
+              start_index_pos,end_index_pos=extract_index(df_pos,arg_r,arg_p,arg_t,'date',d_start_date,d_end_date)
+              filename=arg_r+'_'+arg_p+'_'+d_timestamp
+              df_pos[arg][start_index_pos:end_index_pos].to_csv("%s"%path_to_download_folder+'/'+filename+'.csv', index=False,encoding='utf-8', columns=['date','pos_x','pos_y','pos_z'])
             else: 
-              get_db(d_rec,arg_t)
-              arg =  "%s"%arg_r+'_'+arg_p+'_'+arg_t
-              start_index_tropo,end_index_tropo=extract_index(df_tropo,arg_r,"%s"%arg_p,arg_t,'date',d_start_date,d_end_date)
-      # Convert data to a string.
-              s = io.StringIO() 
-              df_tropo[arg][start_index_tropo:end_index_tropo].to_csv(s, index=False,encoding='utf-8', columns=['date','data_val'])
-              content = s.getvalue()
-      # The output must follow this form for the download to work.
-              return dict(filename= "%s"%arg_r+'_'+arg_p+'_'+d_timestamp+'.csv', content=content, type="text/csv")
+              if arg_p!='ZHD':
+                get_db(d_rec,arg_t)
+                arg =  arg_r+'_'+arg_p+'_'+arg_t
+                start_index_tropo,end_index_tropo=extract_index(df_tropo,arg_r,arg_p,arg_t,'date',d_start_date,d_end_date)
+                filename=arg_r+'_'+arg_p+'_'+d_timestamp
+                df_tropo[arg][start_index_tropo:end_index_tropo].to_csv("%s"%path_to_download_folder+'/'+filename+'.csv', index=False,encoding='utf-8', columns=['date','data_val'])
+              else:
+                get_db(d_rec,arg_t)
+                arg =  arg_r+'_'+arg_p+'_'+arg_t
+                start_index_tropo,end_index_tropo=extract_index(df_tropo,arg_r,'ZTD',arg_t,'date',d_start_date,d_end_date)
+                filename=arg_r+'_'+arg_p+'_'+d_timestamp
+                zhd_df = pd.DataFrame(columns=['date','data_val'])
+                zhd_df['date']=df_tropo[arg_r+'_ZTD_'+arg_t]['date'][start_index_tropo:end_index_tropo]
+                zhd_df['data_val']=df_tropo[arg_r+'_ZTD_'+arg_t]['data_val'][start_index_tropo:end_index_tropo]-df_tropo[arg_r+'_ZWD_'+arg_t]['data_val'][start_index_tropo:end_index_tropo]
+                zhd_df.to_csv("%s"%path_to_download_folder+'/'+filename+'.csv', index=False,encoding='utf-8', columns=['date','data_val'])
+          
 
+        return 'Download ended check in download folder'
+ 
+
+              
 
 if __name__ == '__main__':
     app.run_server(debug=True)

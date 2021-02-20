@@ -1,0 +1,1 @@
+dbname=GNSS_REAL_TIME user=postgres password=user

@@ -9,13 +9,26 @@ cnopts.hostkeys = None
 with pysftp.Connection(host=myHostname, username=myUsername, password=myPassword, port=22, cnopts=cnopts) as sftp:
     print ('Connection succesfully stablished')
 
+    # # Switch to a remote directory
+    # sftp.cwd('/2021/')
+    
+    # # Print data
+    # for attr in sftp.listdir():
+    #     for attr_2 in sftp.listdir(attr):
+    #       print (attr_2)
+
     # Switch to a remote directory
-    sftp.cwd('/2021/')
+    sftp.cwd('/')
 
     # Print data
     for attr in sftp.listdir():
-        for attr_2 in sftp.listdir(attr):
-          print (attr_2)
+      print(attr)
+      for attr_1 in sftp.listdir(attr):
+        print(attr_1)
+        lis=sftp.listdir(attr1)
+        print(lis)
+        #for attr_2 in sftp.listdir(attr_1):
+         # print(attr_2)
 # Define the file that you want to download from the remote directory
     #remoteFilePath = '/var/integraweb-db-backups/TUTORIAL.txt'
 

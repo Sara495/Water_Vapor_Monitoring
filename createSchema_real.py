@@ -86,7 +86,7 @@ def knn_stat_tropo(df,time_param):
   knn=knn.dropna()
   x_knn = knn['data_val'].values.reshape(-1,1)
   # Train kNN detector
-  clf = KNN(contamination=0.1, n_neighbors=8, method='median')
+  clf = KNN(contamination=0.01, n_neighbors=21, method='median')
   if len(x_knn) <= clf.n_neighbors:
     clf.n_neighbors=math.floor(len(x_knn)/2)
     clf.fit(x_knn)

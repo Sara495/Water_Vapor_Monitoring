@@ -145,7 +145,7 @@ flag_pos = []
 # Tropo_Set
 id_tropo_table = []
 type_field = []
-types = ['ZTD','ZWD','PWV','PRESSURE','TEMPERATURE','HUMIDITY','N_SAT']
+types = ['ZTD','ZWD','PWV','PRESSURE','TEMPERATURE','HUMIDITY']
 id_result_ts = []
 sol_id_troposet =[]
 # GNSS_Tropo list var
@@ -173,20 +173,25 @@ myPassword = "sZb.WHeXb2h3j"
 cnopts = pysftp.CnOpts()
 cnopts.hostkeys = None
 #Connect to SFTP page
+
+
+
 with pysftp.Connection(host=myHostname, username=myUsername, password=myPassword, port=22, cnopts=cnopts) as sftp:
     print ('Connection succesfully stablished')
     # Switch to a remote directory
     sftp.cwd('/')
-
-    # Save files in input folder 
+    
+    # Print data
     for attr in sftp.listdir():
-      print(attr)
-      for attr_1 in sftp.listdir(attr):
-        print(attr_1)
-        for attr_2 in sftp.listdir(attr_1):
-          print(attr_2)
-          remotepath="%s"%'/'+attr+'/'+attr_1+'/'+attr_2
-          sftp.get(remotepath, "%s"%'./input_real/'+attr_2)
+      fold_1=attr
+      for attr_2 in sftp.listdir(fold_1+'/'):
+        fold_2=attr_2
+        for attr_3 in sftp.listdir(fold_1+'/'+fold_2+'/'):
+          filename=attr_3
+          print(filename)
+          sftp.get(fold_1+'/'+fold_2+'/'+filename, "%s"%'./input_real/'+filename)
+    sftp.close()
+
 
 myFile = open('dbConfig_real.txt')
 connStr = myFile.readline()
@@ -220,8 +225,11 @@ for f in os.listdir(input_folder):
       l = list(file)
       if check_sol != []:
         s=int(check_sol[-1])
+        print(check_sol)
       s = s+1
       sol_id.append(s)
+      print(s)
+      print(sol_id)
       file_name.append("%s"%f)
       initial_advice='Loading file {} '.format("%s"%f)
       print(initial_advice)
@@ -240,19 +248,27 @@ for f in os.listdir(input_folder):
       out_tropo_zwd=pd.DataFrame({'epoch_time':file['utc_time'][:,0],"%s"%'zwd_'+name_r:file['zwd'][:,0]})
       
 
-      # store anomalies for coordinates 
-      ax = knn_stat(out,'pos_time',med_rec_x)
-      ay = knn_stat(out,'pos_time',med_rec_y)
-      az = knn_stat(out,'pos_time',med_rec_z)
-      a_x=dict.fromkeys(list(ax.date), True)
-      a_y=dict.fromkeys(list(ay.date), True)
-      a_z=dict.fromkeys(list(az.date), True)
-
+      # # store anomalies for coordinates 
+      # ax = knn_stat(out,'pos_time',med_rec_x)
+      # ay = knn_stat(out,'pos_time',med_rec_y)
+      # az = knn_stat(out,'pos_time',med_rec_z)
+      # a_x=dict.fromkeys(list(ax.date), True)
+      # a_y=dict.fromkeys(list(ay.date), True)
+      # a_z=dict.fromkeys(list(az.date), True)
+      a_x=[]
+      a_y=[]
+      a_z=[]
         # store anomalies for tropospheric delays 
       a_ztd = knn_stat_tropo(out_tropo_ztd,'epoch_time')
       a_zwd = knn_stat_tropo(out_tropo_zwd,'epoch_time')
       a_ztd_date = dict.fromkeys(list(a_ztd.date), True)
       a_zwd_date = dict.fromkeys(list(a_zwd.date), True)
+      
+      a_pwv_date=[]
+      a_pressure_date=[]
+      a_temperature_date=[]
+      a_humidity_date=[]
+
         
         #med_rec_x,med_rec_y,med_rec_z,name_rec = remove_median_coord()
         #med_rec_ztd,med_rec_zwd,name_rec = remove_median_tropo()
@@ -301,7 +317,7 @@ for f in os.listdir(input_folder):
               file['utc_time']  in a_z:
                 flag_pos.append(1)
             else:
-              flag_pos.append(0)
+                flag_pos.append(0)
               
 
         for tf in types:
@@ -314,7 +330,7 @@ for f in os.listdir(input_folder):
             # For each measurement
           for d in range(len(file['utc_time'])):
             tmp_time = file['utc_time'][d,0]
-            tmp_data = r[tf.lower()][d,0]
+            tmp_data = file[tf.lower()][d,0]
             if math.isnan(tmp_time) is not True and math.isnan(tmp_data) is not True:
               n_trp = n_trp+1 
               id_tropo.append(n_trp)
@@ -479,7 +495,7 @@ for f in os.listdir(input_folder):
          # For each measurement
           for d in range(len(file['utc_time'])):
             tmp_time = file['utc_time'][d,0]
-            tmp_data = r[tf.lower()][d,0]
+            tmp_data = file[tf.lower()][d,0]
             if math.isnan(tmp_time) is not True and math.isnan(tmp_data) is not True:
                 n_trp = n_trp+1 
                 id_tropo.append(n_trp)
@@ -507,6 +523,48 @@ for f in os.listdir(input_folder):
                         flag_tropo.append(1)
                   else:
                       flag_tropo.append(0)
+                elif tf == 'PWV':
+                  if file['utc_time'][d,0] in a_pwv_date:
+                    if file['utc_time'][d,0]  in a_x or \
+                      file['utc_time'][d,0]  in a_y or \
+                      file['utc_time'][d,0]  in a_z:
+                        flag_tropo.append(2)
+                    else:
+                        flag_tropo.append(1)
+                  else:
+                      flag_tropo.append(0)
+                elif tf == 'PRESSURE':
+                  if file['utc_time'][d,0] in a_pressure_date:
+                    if file['utc_time'][d,0]  in a_x or \
+                      file['utc_time'][d,0]  in a_y or \
+                      file['utc_time'][d,0]  in a_z:
+                        flag_tropo.append(2)
+                    else:
+                        flag_tropo.append(1)
+                  else:
+                      flag_tropo.append(0)
+                elif tf == 'TEMPERATURE':
+                  if file['utc_time'][d,0] in a_temperature_date:
+                    if file['utc_time'][d,0]  in a_x or \
+                      file['utc_time'][d,0]  in a_y or \
+                      file['utc_time'][d,0]  in a_z:
+                        flag_tropo.append(2)
+                    else:
+                        flag_tropo.append(1)
+                  else:
+                      flag_tropo.append(0)
+                elif tf == 'HUMIDITY':
+                  if file['utc_time'][d,0] in a_humidity_date:
+                    if file['utc_time'][d,0]  in a_x or \
+                      file['utc_time'][d,0]  in a_y or \
+                      file['utc_time'][d,0]  in a_z:
+                        flag_tropo.append(2)
+                    else:
+                        flag_tropo.append(1)
+                  else:
+                      flag_tropo.append(0)
+                                 
+                
 
 
         cur.close()
@@ -616,7 +674,7 @@ for f in os.listdir(input_folder):
         conn.close()
       
 
-    # Reset values
+      # Reset values
       GGM = pd.DataFrame(columns=['id_result','short_name_4ch','active_constellations','a_priori_x','a_priori_y','sol_id'])
       Position_Set = pd.DataFrame(columns=['id_pos_table','id_result','sol_id'])
       GNSS_Position = pd.DataFrame(columns=['id_pos','pos_time','pos_x','pos_y','pos_z','id_pos_table','sol_id','flag_pos'])

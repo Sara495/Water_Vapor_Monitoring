@@ -10,8 +10,8 @@ attribution = '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a> '
 app = dash.Dash()
 
 app.layout = html.Div([
-  dl.Map([dl.TileLayer(url=url, maxZoom=20, attribution=attribution),dl.LayerGroup(id="layer")],
-  id="map", style={'width': '100%', 'height': '50vh', 'margin': "auto", "display": "block"}),
+  dl.Map([dl.TileLayer(url=url, maxZoom=20,  attribution=attribution),dl.LayerGroup(id="layer")],
+  id="map", style={'width': '100%', 'height': '50vh', 'margin': "auto", "display": "block"},center=[45.8082,9.78],zoom=8),
   ])
 
 
@@ -23,3 +23,4 @@ def map_click(click_lat_lng):
 
 if __name__ == '__main__':
     app.run_server()   
+

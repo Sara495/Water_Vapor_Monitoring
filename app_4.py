@@ -27,6 +27,8 @@ from datetime import date
 from dash_extensions import Download
 import io
 from pathlib import Path
+import dash_leaflet as dl
+
 # DATA VISUALIZATION WITH RATES INTEGRATED
 
 mapbox_access_token = open("mapbox_token.txt").read()
@@ -204,7 +206,7 @@ app.layout = html.Div([
               labelStyle={'display': 'inline-block'}
           )],style={'textAlign':'left','padding':'0px 0px 0px 100px'}),
           dcc.Loading(id='loading_map', children=[
-          dcc.Graph(
+          dcc.Graph( 
             id='map'
           )],type="circle")
           ],style={'backgroundColor': colors['background'],'textAlign': 'left','color': colors['text'],'padding':'20px 0 0px 50px'},open=True),
@@ -1075,7 +1077,7 @@ def update_map(style_layer):
       width=700,
       mapbox= {
         'zoom': 6.9,
-        'center':{'lon':9.78,'lat':45.8082}, #9.0832
+        'center':{'lon':9.78,'lat':45.8082}, 
         'accesstoken': 'pk.eyJ1Ijoic2FyYW1hZmZpb2xpOTUiLCJhIjoiY2sxZzZkMmFlMDhtMDNocXB1aTgzam04NiJ9._N6Pg4KwL7jRjTCNm6BjOA',
         'style': 'mapbox://styles/mapbox/satellite-v9'
         },

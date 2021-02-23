@@ -36,7 +36,7 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 #Access to database
-myFile = open('dbConfig.txt')
+myFile = open('dbConfig_real.txt')
 connStr = myFile.readline()
 data_conn = connStr.split(" ",2)
 dbname = data_conn[0].split("=",1)[1]
@@ -48,13 +48,13 @@ engine = create_engine('postgresql://'+username+':'+password+'@localhost:5432/'+
 
 # Retrive receivers data
 ggm_table = pd.read_sql_query(""" select * from ggm """,engine)
-ecef = pyproj.Proj(proj='geocent', ellps='WGS84', datum='WGS84')
-lla = pyproj.Proj(proj='latlong', ellps='WGS84', datum='WGS84')
-enu = pyproj.Proj(proj='utm',zone='32N',ellps='WGS84', datum='WGS84')
-lon, lat, alt = pyproj.transform(ecef, lla, ggm_table['a_priori_x'].values, ggm_table['a_priori_y'].values,  ggm_table['a_priori_z'].values, radians=False)
-ggm_table['lon'] = lon
-ggm_table['lat'] = lat
-ggm_table['alt'] = alt
+#ecef = pyproj.Proj(proj='geocent', ellps='WGS84', datum='WGS84')
+#lla = pyproj.Proj(proj='latlong', ellps='WGS84', datum='WGS84')
+#enu = pyproj.Proj(proj='utm',zone='32N',ellps='WGS84', datum='WGS84')
+#lon, lat, alt = pyproj.transform(ecef, lla, ggm_table['a_priori_x'].values, ggm_table['a_priori_y'].values,  ggm_table['a_priori_z'].values, radians=False)
+ggm_table['lon'] = ggm_table['a_priori_x']
+ggm_table['lat'] = ggm_table['a_priori_y']
+#ggm_table['alt'] = alt
 receivers=ggm_table['short_name_4ch']
 
 # Tropospheric params

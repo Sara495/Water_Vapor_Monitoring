@@ -247,6 +247,10 @@ for f in os.listdir(input_folder):
         name_r=file['marker_name'][0]  #this value will be the receiver considered in each loop
         out_tropo_ztd=pd.DataFrame({'epoch_time':file['utc_time'][:,0],"%s"%'ztd_'+name_r:file['ztd'][:,0]})
         out_tropo_zwd=pd.DataFrame({'epoch_time':file['utc_time'][:,0],"%s"%'zwd_'+name_r:file['zwd'][:,0]})
+        out_pressure=pd.DataFrame({'epoch_time':file['utc_time'][:,0],"%s"%'pressure_'+name_r:file['pressure'][:,0]})
+        out_temperature=pd.DataFrame({'epoch_time':file['utc_time'][:,0],"%s"%'temperature_'+name_r:file['temperature'][:,0]})
+        out_humidity=pd.DataFrame({'epoch_time':file['utc_time'][:,0],"%s"%'humidity_'+name_r:file['humidity'][:,0]})
+        out_pwv=pd.DataFrame({'epoch_time':file['utc_time'][:,0],"%s"%'pwv_'+name_r:file['pwv'][:,0]})
         
 
         # # store anomalies for coordinates 
@@ -265,10 +269,15 @@ for f in os.listdir(input_folder):
         a_ztd_date = dict.fromkeys(list(a_ztd.date), True)
         a_zwd_date = dict.fromkeys(list(a_zwd.date), True)
         
-        a_pwv_date=[]
-        a_pressure_date=[]
-        a_temperature_date=[]
-        a_humidity_date=[]
+        # store anomalies for meteorological delays 
+        a_pressure = knn_stat_tropo(out_pressure,'epoch_time')
+        a_temperature = knn_stat_tropo(out_temperature,'epoch_time')
+        a_humidity = knn_stat_tropo(out_humidity,'epoch_time')  
+        a_pwv = knn_stat_tropo(out_pwv,'epoch_time')  
+        a_pwv_date=dict.fromkeys(list(a_pwv.date), True)
+        a_pressure_date=dict.fromkeys(list(a_pressure.date), True)
+        a_temperature_date=dict.fromkeys(list(a_temperature.date), True)
+        a_humidity_date=dict.fromkeys(list(a_humidity.date), True)
 
           
           #med_rec_x,med_rec_y,med_rec_z,name_rec = remove_median_coord()

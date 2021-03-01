@@ -48,9 +48,9 @@ engine = create_engine('postgresql://'+username+':'+password+'@localhost:5432/'+
 
 # Retrive receivers data
 ggm_table = pd.read_sql_query(""" select * from ggm """,engine)
-#ecef = pyproj.Proj(proj='geocent', ellps='WGS84', datum='WGS84')
+ecef = pyproj.Proj(proj='geocent', ellps='WGS84', datum='WGS84')
 #lla = pyproj.Proj(proj='latlong', ellps='WGS84', datum='WGS84')
-#enu = pyproj.Proj(proj='utm',zone='32N',ellps='WGS84', datum='WGS84')
+enu = pyproj.Proj(proj='utm',zone='32N',ellps='WGS84', datum='WGS84')
 #lon, lat, alt = pyproj.transform(ecef, lla, ggm_table['a_priori_x'].values, ggm_table['a_priori_y'].values,  ggm_table['a_priori_z'].values, radians=False)
 ggm_table['lon'] = ggm_table['a_priori_x']
 ggm_table['lat'] = ggm_table['a_priori_y']

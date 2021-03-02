@@ -1098,7 +1098,7 @@ def update_map(style_layer):
       height=500,
       width=700,
       mapbox= {
-        'zoom': 6.9,
+        'zoom': 6.7,
         'center':{'lon':9.78,'lat':45.8082}, 
         'accesstoken': 'pk.eyJ1Ijoic2FyYW1hZmZpb2xpOTUiLCJhIjoiY2sxZzZkMmFlMDhtMDNocXB1aTgzam04NiJ9._N6Pg4KwL7jRjTCNm6BjOA',
         'style': 'mapbox://styles/mapbox/satellite-v9'
@@ -1119,7 +1119,7 @@ def update_map(style_layer):
       height=500,
       width=700,
       mapbox= {
-        'zoom': 6.9,
+        'zoom': 6.7,
         'center':{'lon':9.78,'lat':45.8082},
         'style':'open-street-map'
         },
@@ -1138,7 +1138,7 @@ def update_map(style_layer):
       height=500,
       width=700,
       mapbox= {
-        'zoom': 6.9,
+        'zoom': 6.7,
         'center':{'lon':9.78,'lat':45.8082},
         'accesstoken': 'pk.eyJ1Ijoic2FyYW1hZmZpb2xpOTUiLCJhIjoiY2sxZzZkMmFlMDhtMDNocXB1aTgzam04NiJ9._N6Pg4KwL7jRjTCNm6BjOA',
         'style': 'mapbox://styles/saramaffioli95/ck2m0kuo300cc1ctfnpqg6dum'

@@ -167,30 +167,30 @@ n_trp = 0
 n_ps = 0
 n_pos = 0
 
-#myHostname = "access834337968.webspace-data.io"
-#myUsername = "u101458685-tropo-nrt"
-#myPassword = "sZb.WHeXb2h3j"
-#cnopts = pysftp.CnOpts()
-#cnopts.hostkeys = None
-##Connect to SFTP page
-#
-#
-#
-#with pysftp.Connection(host=myHostname, username=myUsername, password=myPassword, port=22, cnopts=cnopts) as sftp:
-#    print ('Connection succesfully stablished')
-#    # Switch to a remote directory
-#    sftp.cwd('/')
-#    
-#    # Print data
-#    for attr in sftp.listdir():
-#      fold_1=attr
-#      for attr_2 in sftp.listdir(fold_1+'/'):
-#        fold_2=attr_2
-#        for attr_3 in sftp.listdir(fold_1+'/'+fold_2+'/'):
-#          filename=attr_3
-#          print(filename)
-#          sftp.get(fold_1+'/'+fold_2+'/'+filename, "%s"%'./input_real/'+filename)
-#    sftp.close()
+myHostname = "access834337968.webspace-data.io"
+myUsername = "u101458685-tropo-nrt"
+myPassword = "sZb.WHeXb2h3j"
+cnopts = pysftp.CnOpts()
+cnopts.hostkeys = None
+#Connect to SFTP page
+
+
+
+with pysftp.Connection(host=myHostname, username=myUsername, password=myPassword, port=22, cnopts=cnopts) as sftp:
+   print ('Connection succesfully stablished')
+   # Switch to a remote directory
+   sftp.cwd('/')
+   
+   # Print data
+   for attr in sftp.listdir():
+     fold_1=attr
+     for attr_2 in sftp.listdir(fold_1+'/'):
+       fold_2=attr_2
+       for attr_3 in sftp.listdir(fold_1+'/'+fold_2+'/'):
+         filename=attr_3
+         print(filename)
+         sftp.get(fold_1+'/'+fold_2+'/'+filename, "%s"%'./input_real/'+filename)
+   sftp.close()
 
 
 myFile = open('dbConfig_real.txt')

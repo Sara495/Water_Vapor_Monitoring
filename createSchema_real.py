@@ -513,8 +513,8 @@ for f in os.listdir(input_folder):
             id_result.append(n)
             short_name_4ch.append((str(file['marker_name'][0])).upper())
             active_constellations.append(str(file['sys'][0]))
-            a_priori_x.append(file['lat'][0,0])
-            a_priori_y.append(file['lon'][0,0])
+            a_priori_x.append(file['lon'][0,0])
+            a_priori_y.append(file['lat'][0,0])
             sol_id_ggm.append(s)
   
             # For each position

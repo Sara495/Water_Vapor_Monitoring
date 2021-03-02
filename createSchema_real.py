@@ -472,7 +472,7 @@ for f in os.listdir(input_folder):
             })
             GNSS_Position.to_sql('gnssposition', engine ,if_exists='append',index=False,
               dtype={'id_pos': sq.INT(),
-                'pos_time': sq.FLOAT(),
+                'pos_time': sq.INT(),
                 'pos_x': sq.FLOAT(),
                 'pos_y': sq.FLOAT(),
                 'pos_z': sq.FLOAT(),
@@ -489,7 +489,7 @@ for f in os.listdir(input_folder):
             })
             GNSS_Tropo.to_sql('gnsstropo', engine, if_exists='append',index=False,
               dtype={'id_tropo': sq.INT(),
-                'epoch_time': sq.FLOAT(),
+                'epoch_time': sq.INT(),
                 'data_val': sq.FLOAT(),
                 'id_tropo_table':sq.INT(),
                 'sol_id': sq.INT(),
@@ -694,7 +694,7 @@ for f in os.listdir(input_folder):
             })
             GNSS_Position.to_sql('gnssposition', engine ,if_exists='append',index=False,
               dtype={'id_pos': sq.INT(),
-                'pos_time': sq.FLOAT(),
+                'pos_time': sq.INT(),
                 'pos_x': sq.FLOAT(),
                 'pos_y': sq.FLOAT(),
                 'pos_z': sq.FLOAT(),
@@ -711,7 +711,7 @@ for f in os.listdir(input_folder):
             })
             GNSS_Tropo.to_sql('gnsstropo', engine, if_exists='append',index=False,
               dtype={'id_tropo': sq.INT(),
-                'epoch_time': sq.FLOAT(),
+                'epoch_time': sq.INT(),
                 'data_val': sq.FLOAT(),
                 'id_tropo_table':sq.INT(),
                 'sol_id': sq.INT(),

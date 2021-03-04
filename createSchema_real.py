@@ -798,3 +798,4 @@ print('exit')
 files = glob.glob(input_folder+'/*')
 for fil in files:
     os.remove(fil)
+

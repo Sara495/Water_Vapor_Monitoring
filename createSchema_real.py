@@ -15,6 +15,7 @@ from pyod.utils import evaluate_print
 import time
 import math
 import pysftp
+import glob
 
 psycopg2.extensions.register_adapter(np.ndarray, psycopg2._psycopg.AsIs)
 
@@ -794,4 +795,6 @@ for f in os.listdir(input_folder):
 
 print('exit')
 
-
+files = glob.glob(input_folder+'/*')
+for fil in files:
+    os.remove(fil)

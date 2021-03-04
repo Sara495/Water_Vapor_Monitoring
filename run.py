@@ -4,8 +4,8 @@ import os
 
 def job():
     print("I'm working...")
-    os.system('python3 test_connection.py')
-schedule.every().minute.at(":17").do(job)
+    os.system('python3 createSchema_real.py')
+schedule.every().hour.at(":00").do(job)
 
 
 while True:

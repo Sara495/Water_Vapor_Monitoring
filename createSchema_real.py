@@ -167,6 +167,24 @@ n_trp = 0
 n_ps = 0
 n_pos = 0
 
+
+myFile = open('dbConfig_real.txt')
+connStr = myFile.readline()
+data_conn = connStr.split(" ",2)
+dbname = data_conn[0].split("=",1)[1]
+username = data_conn[1].split("=",1)[1]
+password = data_conn[2].split("=",1)[1]
+print(connStr,dbname,username,password)
+
+conn = connect(connStr)
+cur = conn.cursor()
+cur.execute('SELECT file_name FROM importparam')
+check_input_file=[]
+for row in cur:
+  check_input_file.append(row[0])
+
+
+
 myHostname = "access834337968.webspace-data.io"
 myUsername = "u101458685-tropo-nrt"
 myPassword = "sZb.WHeXb2h3j"
@@ -188,18 +206,12 @@ with pysftp.Connection(host=myHostname, username=myUsername, password=myPassword
        fold_2=attr_2
        for attr_3 in sftp.listdir(fold_1+'/'+fold_2+'/'):
          filename=attr_3
-         print(filename)
-         sftp.get(fold_1+'/'+fold_2+'/'+filename, "%s"%'./input_real/'+filename)
+         #print(filename)
+         if filename.split('.')[-1] =='mat':
+           if filename not in check_input_file:
+             sftp.get(fold_1+'/'+fold_2+'/'+filename, "%s"%'./input_real/'+filename)
    sftp.close()
 
-
-myFile = open('dbConfig_real.txt')
-connStr = myFile.readline()
-data_conn = connStr.split(" ",2)
-dbname = data_conn[0].split("=",1)[1]
-username = data_conn[1].split("=",1)[1]
-password = data_conn[2].split("=",1)[1]
-print(connStr,dbname,username,password)
 
 
 input_folder = r'input_real/'

@@ -178,7 +178,7 @@ password = data_conn[2].split("=",1)[1]
 print(connStr,dbname,username,password)
 
 
-input_folder = r'/Users/saramaffioli/Desktop/dash/input/'
+input_folder = r'input/'
 
 for f in os.listdir(input_folder):
   if f != '.DS_Store':
@@ -214,6 +214,7 @@ for f in os.listdir(input_folder):
       file_name.append("%s"%f)
       initial_advice='Loading file {} '.format("%s"%f)
       print(initial_advice)
+      start_all=time.time()
 
       # For each receiver len(rec_array[0,:])
       for i in range(len(rec_array[0,:])):
@@ -261,8 +262,11 @@ for f in os.listdir(input_folder):
         a_z=dict.fromkeys(list(az.date), True)
         med_rec_ztd,med_rec_zwd,name_rec = remove_median_tropo()
         # store anomalies for tropospheric delays 
+        start_knn=time.time()
         a_ztd = knn_stat(out_tropo,'epoch_time',med_rec_ztd)
         a_zwd = knn_stat(out_tropo,'epoch_time',med_rec_zwd)
+        end_knn=time.time()
+        print('KNN {}'.format( end_knn-start_knn))
         a_ztd_date = dict.fromkeys(list(a_ztd.date), True)
         a_zwd_date = dict.fromkeys(list(a_zwd.date), True)
         
@@ -737,7 +741,8 @@ for f in os.listdir(input_folder):
 
 
 
-
+end_all=time.time()
+print('ALL time si {}'.format( end_all-start_all))
 
 print('exit')
 

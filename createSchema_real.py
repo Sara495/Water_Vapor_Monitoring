@@ -19,62 +19,7 @@ import glob
 
 psycopg2.extensions.register_adapter(np.ndarray, psycopg2._psycopg.AsIs)
 
-# remove trend for each receiver to prepare dataset for outlier remover
-def remove_median_coord():
-  # create an array with lenght equal to the # of receivers to store the values of the 
-  # coordinates in the three directions, and a list for the rec name
-  for i in range(len(rec_array[0,:])):
-  # create a zero array of arrays with same length of epoch values, and
-  # dimension equal to the # of receivers
-    med_rec_x=np.zeros((len(out['pos_time']),len(rec_array[0])))
-    med_rec_y=np.zeros((len(out['pos_time']),len(rec_array[0])))
-    med_rec_z=np.zeros((len(out['pos_time']),len(rec_array[0])))
-    name_rec=[]
-  # for each receiver remove the median by column    
-  for i in range(len(rec_array[0,:])):
-    name=rec_array[0,i]['short_name_4ch'][0]
-    med_rec_x[:,i]=out["%s"%'pos_x_'+name]- np.nanmedian(out["%s"%'pos_x_'+name])    
-    med_rec_y[:,i]=out["%s"%'pos_y_'+name]- np.nanmedian(out["%s"%'pos_y_'+name])
-    med_rec_z[:,i]=out["%s"%'pos_z_'+name]- np.nanmedian(out["%s"%'pos_z_'+name])  
-    # store the name of the receivers at issue in an array to be used in knn
-    name_rec.append(name)
-  # compute the median by row and remove it by each column
-  med_x= np.nanmedian(med_rec_x,axis=1)
-  med_y= np.nanmedian(med_rec_y,axis=1)
-  med_z= np.nanmedian(med_rec_z,axis=1)
-  for j in range(len(med_rec_x[0])):
-    med_rec_x[:,j]=med_rec_x[:,j]-med_x
-    med_rec_y[:,j]=med_rec_y[:,j]-med_y
-    med_rec_z[:,j]=med_rec_z[:,j]-med_z
-  return(med_rec_x,med_rec_y,med_rec_z,name_rec)
-  
-# remove trend for each receiver to prepare dataset for outlier remover
-def remove_median_tropo():
-  # create an array with lenght equal to the # of receivers to store the values of the 
-  # tropospheric delays ztd, zwd, and a list for the rec name
-  for i in range(len(rec_array[0,:])):
-  # create a zero array of arrays with same length of epoch values, and
-  # dimension equal to the # of receivers
-    med_rec_ztd=np.zeros((len(out_tropo['epoch_time']),len(rec_array[0])))
-    med_rec_zwd=np.zeros((len(out_tropo['epoch_time']),len(rec_array[0])))
-    name_rec=[]
-  # for each receiver remove the median by column    
-  for i in range(len(rec_array[0,:])):
-    name=rec_array[0,i]['short_name_4ch'][0]
-    med_rec_ztd[:,i]=out_tropo["%s"%'ztd_'+name]- np.nanmedian(out_tropo["%s"%'ztd_'+name])    
-    med_rec_zwd[:,i]=out_tropo["%s"%'zwd_'+name]- np.nanmedian(out_tropo["%s"%'zwd_'+name])
-    # store the name of the receivers at issue in an array to be used in knn
-    name_rec.append(name)
-  # compute the median by row and remove it by each column
-  med_ztd= np.nanmedian(med_rec_ztd,axis=1)
-  med_zwd= np.nanmedian(med_rec_zwd,axis=1)
-  for j in range(len(med_rec_ztd[0])):
-    med_rec_ztd[:,j]=med_rec_ztd[:,j]-med_ztd
-    med_rec_zwd[:,j]=med_rec_zwd[:,j]-med_zwd
-  return(med_rec_ztd,med_rec_zwd,name_rec)
 
-
-  
 
 def knn_stat_tropo(df,time_param):
   knn=pd.DataFrame()
@@ -297,8 +242,6 @@ for f in os.listdir(input_folder):
           a_humidity_date=dict.fromkeys(list(a_humidity.date), True)
   
             
-            #med_rec_x,med_rec_y,med_rec_z,name_rec = remove_median_coord()
-            #med_rec_ztd,med_rec_zwd,name_rec = remove_median_tropo()
   
           conn = connect(connStr)
           cur = conn.cursor()

@@ -5,6 +5,7 @@ import os
 def job():
     print("I'm working...")
     os.system('python3 createSchema_real.py')
+    print('I am out')
 schedule.every().hour.at(":00").do(job)
 
 

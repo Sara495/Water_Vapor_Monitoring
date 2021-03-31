@@ -476,7 +476,7 @@ def update_time_series(selected_dropdown_value,selected_type,selected_range,sele
     if selected_range is not None:
       if selected_range != []:
         start_date=dt(min_y,selected_range[0],min_d)
-        end_date=dt(max_y,selected_range[1],max_d+1)
+        end_date=dt(max_y,selected_range[1],max_d)
         print(min_y,min_d,max_y,max_d,start_date,end_date)
         start_index,end_index=extract_index(df_tropo,selectData['points'][0]['text'],'ZTD',rate_val,'date',start_date,end_date)
 
@@ -625,7 +625,7 @@ def update_time_series(selected_dropdown_value,selected_type,selected_range,sele
     if selected_range is not None:
       if selected_range != []:
         start_date=dt(min_y,selected_range[0],min_d)
-        end_date=dt(max_y,selected_range[1],max_d+1)
+        end_date=dt(max_y,selected_range[1],max_d)
         print(min_y,min_d,max_y,max_d,start_date,end_date)
         start_time=time.time()
         start_index,end_index=extract_index(df_tropo,selected_dropdown_value[0],'ZTD',rate_val,'date',start_date,end_date)
@@ -855,7 +855,7 @@ def update_pwv_series(selected_dropdown_value,selected_range,selectData,rate_val
       if selected_range is not None:
         if selected_range != []:
           start_date=dt(min_y,selected_range[0],min_d)
-          end_date=dt(max_y,selected_range[1],max_d+1)
+          end_date=dt(max_y,selected_range[1],max_d)
           print(min_y,min_d,max_y,max_d,start_date,end_date)
           start_index,end_index=extract_index(df_tropo,selectData['points'][0]['text'],'PWV',rate_val,'date',start_date,end_date)
       # For each selected receiver
@@ -943,7 +943,7 @@ def update_pwv_series(selected_dropdown_value,selected_range,selectData,rate_val
       if selected_range is not None:
         if selected_range != []:
           start_date=dt(min_y,selected_range[0],min_d)
-          end_date=dt(max_y,selected_range[1],max_d+1)
+          end_date=dt(max_y,selected_range[1],max_d)
           print(min_y,min_d,max_y,max_d,start_date,end_date)
           start_index,end_index=extract_index(df_tropo,selected_dropdown_value[0],'ZTD',rate_val,'date',start_date,end_date)
     # For each selected receiver
@@ -1183,7 +1183,7 @@ def update_tropo_series(selected_dropdown_value,selected_range,selectData,rate_v
       if selected_range is not None:
         if selected_range != []:
           start_date=dt(min_y,selected_range[0],min_d)
-          end_date=dt(max_y,selected_range[1],max_d+1)
+          end_date=dt(max_y,selected_range[1],max_d)
           print(min_y,min_d,max_y,max_d,start_date,end_date)
           start_index,end_index=extract_index(df_tropo,selectData['points'][0]['text'],'PRESSURE',rate_val,'date',start_date,end_date)
 
@@ -1303,7 +1303,7 @@ def update_tropo_series(selected_dropdown_value,selected_range,selectData,rate_v
       if selected_range is not None:
         if selected_range != []:
           start_date=dt(min_y,selected_range[0],min_d)
-          end_date=dt(max_y,selected_range[1],max_d+1)
+          end_date=dt(max_y,selected_range[1],max_d)
           print(min_y,min_d,max_y,max_d,start_date,end_date)
           start_index,end_index=extract_index(df_tropo,selected_dropdown_value[0],'PRESSURE',rate_val,'date',start_date,end_date)
     # For each selected receiver
@@ -1461,7 +1461,7 @@ def update_coord_series(selected_dropdown_value,values,ref,selected_range,select
     if selected_range is not None:
       if selected_range != []:
         start_date=dt(min_y,selected_range[0],min_d)
-        end_date=dt(max_y,selected_range[1],max_d+1)
+        end_date=dt(max_y,selected_range[1],max_d)
         print(min_y,min_d,max_y,max_d,start_date,end_date)
         start_index,end_index=extract_index(df_pos,selectData['points'][0]['text'],'pos',rate_val,'date',start_date,end_date)
 
@@ -1658,7 +1658,7 @@ def update_coord_series(selected_dropdown_value,values,ref,selected_range,select
       if selected_range is not None:
         if selected_range != []:
           start_date=dt(min_y,selected_range[0],min_d)
-          end_date=dt(max_y,selected_range[1],max_d+1)
+          end_date=dt(max_y,selected_range[1],max_d)
           print(min_y,min_d,max_y,max_d,start_date,end_date)
           start_index,end_index=extract_index(df_pos,selected_dropdown_value[0],'pos',rate_val,'date',start_date,end_date)
     # For each receiver

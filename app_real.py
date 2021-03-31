@@ -489,7 +489,7 @@ def update_time_series(selected_dropdown_value,selected_type,selected_range,sele
           if tropo_type == 'ZHD':
             y_ztd = extract_y_axis_values(df_tropo,selectData['points'][sd]['text'],'ZTD',rate_val,'data_val',start_index,end_index)
             y_zwd = extract_y_axis_values(df_tropo,selectData['points'][sd]['text'],'ZWD',rate_val,'data_val',start_index,end_index)
-            trace.append(go.Scatter(
+            trace.append(go.Scattergl(
               x = extract_x_axis_values(df_tropo,selectData['points'][sd]['text'],'ZTD',rate_val,'date',start_index,end_index),
               y = (y_ztd.astype(float) - y_zwd.astype(float))*100,
               mode= 'markers',
@@ -497,7 +497,7 @@ def update_time_series(selected_dropdown_value,selected_type,selected_range,sele
             ))
           else:
 
-            trace.append(go.Scatter(
+            trace.append(go.Scattergl(
               x = extract_x_axis_values(df_tropo,selectData['points'][sd]['text'],tropo_type,rate_val,'date',start_index,end_index),
               y = (extract_y_axis_values(df_tropo,selectData['points'][sd]['text'],tropo_type,rate_val,'data_val',start_index,end_index).astype(float))*100,
               mode= 'markers',
@@ -645,7 +645,7 @@ def update_time_series(selected_dropdown_value,selected_type,selected_range,sele
             end_zhd=time.time()
             print('the extract y values is {}'.format(end_zhd-start_zhd))
             y_zwd = extract_y_axis_values(df_tropo,rec,'ZWD',rate_val,'data_val',start_index,end_index)
-            trace.append(go.Scatter(
+            trace.append(go.Scattergl(
               x = extract_x_axis_values(df_tropo,rec,'ZTD',rate_val,'date',start_index,end_index),
               y = (y_ztd.astype(float) - y_zwd.astype(float))*100,
               mode= 'markers',
@@ -653,7 +653,7 @@ def update_time_series(selected_dropdown_value,selected_type,selected_range,sele
             ))
           else:
             start_append=time.time()
-            trace.append(go.Scatter(
+            trace.append(go.Scattergl(
               x = extract_x_axis_values(df_tropo,rec,tropo_type,rate_val,'date',start_index,end_index),
               y = (extract_y_axis_values(df_tropo,rec,tropo_type,rate_val,'data_val',start_index,end_index).astype(float))*100,
               mode= 'markers',
@@ -861,7 +861,7 @@ def update_pwv_series(selected_dropdown_value,selected_range,selectData,rate_val
       # For each selected receiver
     for sd in range(int(len(selectData['points']))):
       if df_tropo["%s"%selectData['points'][sd]['text']+"_PWV_"+str(rate_val)].empty == True:
-        trace_pwv.append(go.Scatter(
+        trace_pwv.append(go.Scattergl(
           x = [2],
           y = [2],
           mode = 'markers+text',
@@ -871,7 +871,7 @@ def update_pwv_series(selected_dropdown_value,selected_range,selectData,rate_val
           name= "%s"%selectData['points'][sd]['text']+"_PWV"
         ))
       else:
-        trace_pwv.append(go.Scatter(
+        trace_pwv.append(go.Scattergl(
           x = extract_x_axis_values(df_tropo,selectData['points'][sd]['text'],'PWV',rate_val,'date',start_index,end_index),
           y = (extract_y_axis_values(df_tropo,selectData['points'][sd]['text'],'PWV',rate_val,'data_val',start_index,end_index).astype(float))*1000,
           mode= 'markers',
@@ -949,7 +949,7 @@ def update_pwv_series(selected_dropdown_value,selected_range,selectData,rate_val
     # For each selected receiver
     for rec in selected_dropdown_value:
       if df_tropo["%s"%rec+"_PWV_"+str(rate_val)].empty == True:
-        trace_pwv.append(go.Scatter(
+        trace_pwv.append(go.Scattergl(
           x = [2],
           y = [2],
           mode = 'markers+text',
@@ -958,7 +958,7 @@ def update_pwv_series(selected_dropdown_value,selected_range,selectData,rate_val
           textfont = {'color': '#ff5050', 'size':35}
         ))
       else:
-        trace_pwv.append(go.Scatter(
+        trace_pwv.append(go.Scattergl(
           x = extract_x_axis_values(df_tropo,rec,'PWV',rate_val,'date',start_index,end_index),
           y = (extract_y_axis_values(df_tropo,rec,'PWV',rate_val,'data_val',start_index,end_index).astype(float))*1000,
           mode= 'markers',
@@ -1190,7 +1190,7 @@ def update_tropo_series(selected_dropdown_value,selected_range,selectData,rate_v
     for sd in range(int(len(selectData['points']))):
             # Pressure
       if df_tropo["%s"%selectData['points'][sd]['text']+"_PRESSURE_"+str(rate_val)].empty == True:
-        fig_tropo.append_trace(go.Scatter(
+        fig_tropo.append_trace(go.Scattergl(
           x = [2],
           y = [2],
           mode = 'markers+text',
@@ -1201,7 +1201,7 @@ def update_tropo_series(selected_dropdown_value,selected_range,selectData,rate_v
         ), 1, 1)
 
       else:
-        fig_tropo.append_trace(go.Scatter(
+        fig_tropo.append_trace(go.Scattergl(
           x = extract_x_axis_values(df_tropo,selectData['points'][sd]['text'],'PRESSURE',rate_val,'date',start_index,end_index),
           y = extract_y_axis_values(df_tropo,selectData['points'][sd]['text'],'PRESSURE',rate_val,'data_val',start_index,end_index),
           mode='markers',
@@ -1210,7 +1210,7 @@ def update_tropo_series(selected_dropdown_value,selected_range,selectData,rate_v
 
       # Temperature
       if df_tropo["%s"%selectData['points'][sd]['text']+"_TEMPERATURE_"+str(rate_val)].empty == True:
-        fig_tropo.append_trace(go.Scatter(
+        fig_tropo.append_trace(go.Scattergl(
           x = [2],
           y = [2],
           mode = 'markers+text',
@@ -1221,7 +1221,7 @@ def update_tropo_series(selected_dropdown_value,selected_range,selectData,rate_v
         ), 2, 1)
 
       else:
-        fig_tropo.append_trace(go.Scatter(
+        fig_tropo.append_trace(go.Scattergl(
           x = extract_x_axis_values(df_tropo,selectData['points'][sd]['text'],'TEMPERATURE',rate_val,'date',start_index,end_index),
           y = extract_y_axis_values(df_tropo,selectData['points'][sd]['text'],'TEMPERATURE',rate_val,'data_val',start_index,end_index),
           mode='markers',
@@ -1230,7 +1230,7 @@ def update_tropo_series(selected_dropdown_value,selected_range,selectData,rate_v
 
       # Humidity
       if df_tropo["%s"%selectData['points'][sd]['text']+"_HUMIDITY_"+str(rate_val)].empty == True:
-        fig_tropo.append_trace(go.Scatter(
+        fig_tropo.append_trace(go.Scattergl(
           x = [2],
           y = [2],
           mode = 'markers+text',
@@ -1241,7 +1241,7 @@ def update_tropo_series(selected_dropdown_value,selected_range,selectData,rate_v
         ), 3, 1)
 
       else:
-        fig_tropo.append_trace(go.Scatter(
+        fig_tropo.append_trace(go.Scattergl(
           x = extract_x_axis_values(df_tropo,selectData['points'][sd]['text'],'HUMIDITY',rate_val,'date',start_index,end_index),
           y = extract_y_axis_values(df_tropo,selectData['points'][sd]['text'],'HUMIDITY',rate_val,'data_val',start_index,end_index),
           mode='markers',
@@ -1311,7 +1311,7 @@ def update_tropo_series(selected_dropdown_value,selected_range,selectData,rate_v
 
       # Pressure
       if df_tropo["%s"%rec+"_PRESSURE_"+str(rate_val)].empty == True:
-        fig_tropo.append_trace(go.Scatter(
+        fig_tropo.append_trace(go.Scattergl(
           x = [2],
           y = [2],
           mode = 'markers+text',
@@ -1322,7 +1322,7 @@ def update_tropo_series(selected_dropdown_value,selected_range,selectData,rate_v
         ), 1, 1)
 
       else:
-        fig_tropo.append_trace(go.Scatter(
+        fig_tropo.append_trace(go.Scattergl(
           x = extract_x_axis_values(df_tropo,rec,'PRESSURE',rate_val,'date',start_index,end_index),
           y = extract_y_axis_values(df_tropo,rec,'PRESSURE',rate_val,'data_val',start_index,end_index),
           mode='markers',
@@ -1331,7 +1331,7 @@ def update_tropo_series(selected_dropdown_value,selected_range,selectData,rate_v
 
       # Temperature
       if df_tropo["%s"%rec+"_TEMPERATURE_"+str(rate_val)].empty == True:
-        fig_tropo.append_trace(go.Scatter(
+        fig_tropo.append_trace(go.Scattergl(
           x = [2],
           y = [2],
           mode = 'markers+text',
@@ -1342,7 +1342,7 @@ def update_tropo_series(selected_dropdown_value,selected_range,selectData,rate_v
         ), 2, 1)
 
       else:
-        fig_tropo.append_trace(go.Scatter(
+        fig_tropo.append_trace(go.Scattergl(
           x = extract_x_axis_values(df_tropo,rec,'TEMPERATURE',rate_val,'date',start_index,end_index),
           y = extract_y_axis_values(df_tropo,rec,'TEMPERATURE',rate_val,'data_val',start_index,end_index),
           mode='markers',
@@ -1351,7 +1351,7 @@ def update_tropo_series(selected_dropdown_value,selected_range,selectData,rate_v
 
       # Humidity
       if df_tropo["%s"%rec+"_HUMIDITY_"+str(rate_val)].empty == True:
-        fig_tropo.append_trace(go.Scatter(
+        fig_tropo.append_trace(go.Scattergl(
           x = [2],
           y = [2],
           mode = 'markers+text',
@@ -1362,7 +1362,7 @@ def update_tropo_series(selected_dropdown_value,selected_range,selectData,rate_v
         ), 3, 1)
 
       else:
-        fig_tropo.append_trace(go.Scatter(
+        fig_tropo.append_trace(go.Scattergl(
           x = extract_x_axis_values(df_tropo,rec,'HUMIDITY',rate_val,'date',start_index,end_index),
           y = extract_y_axis_values(df_tropo,rec,'HUMIDITY',rate_val,'data_val',start_index,end_index),
           mode='markers',
@@ -1486,7 +1486,7 @@ def update_coord_series(selected_dropdown_value,values,ref,selected_range,select
           y_east_sd = extract_y_axis_values(df_pos,selectData['points'][sd]['text'],'pos',rate_val,'east',start_index,end_index).astype(float)
           y_east_ref = extract_y_axis_values(df_pos,ref,'pos',rate_val,'east',start_index,end_index).astype(float)
 
-          fig_coord.append_trace(go.Scatter(
+          fig_coord.append_trace(go.Scattergl(
               x = extract_x_axis_values(df_pos,selectData['points'][sd]['text'],'pos',rate_val,'date',start_index,end_index),
               y = y_east_sd - y_east_sd.median() - y_east_ref + y_east_ref.median(),
               mode = 'markers',
@@ -1496,7 +1496,7 @@ def update_coord_series(selected_dropdown_value,values,ref,selected_range,select
           y_north_sd = extract_y_axis_values(df_pos,selectData['points'][sd]['text'],'pos',rate_val,'north',start_index,end_index).astype(float)
           y_north_ref = extract_y_axis_values(df_pos,ref,'pos',rate_val,'north',start_index,end_index).astype(float)
 
-          fig_coord.append_trace(go.Scatter(
+          fig_coord.append_trace(go.Scattergl(
               x = extract_x_axis_values(df_pos,selectData['points'][sd]['text'],'pos',rate_val,'date',start_index,end_index),
               y = y_north_sd - y_north_sd.median() - y_north_ref + y_north_ref.median(),
               mode = 'markers',
@@ -1506,7 +1506,7 @@ def update_coord_series(selected_dropdown_value,values,ref,selected_range,select
           y_up_sd = extract_y_axis_values(df_pos,selectData['points'][sd]['text'],'pos',rate_val,'up',start_index,end_index).astype(float)
           y_up_ref = extract_y_axis_values(df_pos,ref,'pos',rate_val,'up',start_index,end_index).astype(float)
 
-          fig_coord.append_trace(go.Scatter(
+          fig_coord.append_trace(go.Scattergl(
               x = extract_x_axis_values(df_pos,selectData['points'][sd]['text'],'pos',rate_val,'date',start_index,end_index),
               y = y_up_sd - y_up_sd.median() - y_up_ref + y_up_ref.median(),
               mode = 'markers',
@@ -1519,7 +1519,7 @@ def update_coord_series(selected_dropdown_value,values,ref,selected_range,select
           y_east_sd = extract_y_axis_values(df_pos,selectData['points'][sd]['text'],'pos',rate_val,'east',start_index,end_index).astype(float)
           y_east_ref = extract_y_axis_values(df_pos,ref,'pos',rate_val,'east',start_index,end_index).astype(float)
 
-          fig_coord.append_trace(go.Scatter(
+          fig_coord.append_trace(go.Scattergl(
               x = extract_x_axis_values(df_pos,selectData['points'][sd]['text'],'pos',rate_val,'date',start_index,end_index),
               y = y_east_sd - y_east_ref ,
               mode = 'markers',
@@ -1529,7 +1529,7 @@ def update_coord_series(selected_dropdown_value,values,ref,selected_range,select
           y_north_sd = extract_y_axis_values(df_pos,selectData['points'][sd]['text'],'pos',rate_val,'north',start_index,end_index).astype(float)
           y_north_ref = extract_y_axis_values(df_pos,ref,'pos',rate_val,'north',start_index,end_index).astype(float)
 
-          fig_coord.append_trace(go.Scatter(
+          fig_coord.append_trace(go.Scattergl(
               x = extract_x_axis_values(df_pos,selectData['points'][sd]['text'],'pos',rate_val,'date',start_index,end_index),
               y = y_north_sd - y_north_ref,
               mode = 'markers',
@@ -1539,7 +1539,7 @@ def update_coord_series(selected_dropdown_value,values,ref,selected_range,select
           y_up_sd = extract_y_axis_values(df_pos,selectData['points'][sd]['text'],'pos',rate_val,'up',start_index,end_index).astype(float)
           y_up_ref = extract_y_axis_values(df_pos,ref,'pos',rate_val,'up',start_index,end_index).astype(float)
 
-          fig_coord.append_trace(go.Scatter(
+          fig_coord.append_trace(go.Scattergl(
               x = extract_x_axis_values(df_pos,selectData['points'][sd]['text'],'pos',rate_val,'date',start_index,end_index),
               y = y_up_sd - y_up_ref ,
               mode = 'markers',
@@ -1553,7 +1553,7 @@ def update_coord_series(selected_dropdown_value,values,ref,selected_range,select
           # EAST
           y_east_sd = extract_y_axis_values(df_pos,selectData['points'][sd]['text'],'pos',rate_val,'east',start_index,end_index).astype(float)
 
-          fig_coord.append_trace(go.Scatter(
+          fig_coord.append_trace(go.Scattergl(
               x = extract_x_axis_values(df_pos,selectData['points'][sd]['text'],'pos',rate_val,'date',start_index,end_index),
               y = y_east_sd - y_east_sd.median() ,
               mode = 'markers',
@@ -1562,7 +1562,7 @@ def update_coord_series(selected_dropdown_value,values,ref,selected_range,select
           # NORTH
           y_north_sd = extract_y_axis_values(df_pos,selectData['points'][sd]['text'],'pos',rate_val,'north',start_index,end_index).astype(float)
 
-          fig_coord.append_trace(go.Scatter(
+          fig_coord.append_trace(go.Scattergl(
               x = extract_x_axis_values(df_pos,selectData['points'][sd]['text'],'pos',rate_val,'date',start_index,end_index),
               y = y_north_sd - y_north_sd.median(),
               mode = 'markers',
@@ -1572,7 +1572,7 @@ def update_coord_series(selected_dropdown_value,values,ref,selected_range,select
           # UP
           y_up_sd = extract_y_axis_values(df_pos,selectData['points'][sd]['text'],'pos',rate_val,'up',start_index,end_index).astype(float)
 
-          fig_coord.append_trace(go.Scatter(
+          fig_coord.append_trace(go.Scattergl(
               x = extract_x_axis_values(df_pos,selectData['points'][sd]['text'],'pos',rate_val,'date',start_index,end_index),
               y = y_up_sd - y_up_sd.median() ,
               mode = 'markers',
@@ -1581,14 +1581,14 @@ def update_coord_series(selected_dropdown_value,values,ref,selected_range,select
         # If remove median not selected
         else:
           # EAST
-          fig_coord.append_trace(go.Scatter(
+          fig_coord.append_trace(go.Scattergl(
               x = extract_x_axis_values(df_pos,selectData['points'][sd]['text'],'pos',rate_val,'date',start_index,end_index),
               y = extract_y_axis_values(df_pos,selectData['points'][sd]['text'],'pos',rate_val,'east',start_index,end_index).astype(float),
               mode = 'markers',
               name = "%s"%selectData['points'][sd]['text']+" "+"EAST"
             ), 1, 1)
           # NORTH
-          fig_coord.append_trace(go.Scatter(
+          fig_coord.append_trace(go.Scattergl(
               x = extract_x_axis_values(df_pos,selectData['points'][sd]['text'],'pos',rate_val,'date',start_index,end_index),
               y = extract_y_axis_values(df_pos,selectData['points'][sd]['text'],'pos',rate_val,'north',start_index,end_index).astype(float),
               mode = 'markers',
@@ -1596,7 +1596,7 @@ def update_coord_series(selected_dropdown_value,values,ref,selected_range,select
 
             ), 2, 1)
           # UP
-          fig_coord.append_trace(go.Scatter(
+          fig_coord.append_trace(go.Scattergl(
               x = extract_x_axis_values(df_pos,selectData['points'][sd]['text'],'pos',rate_val,'date',start_index,end_index),
               y = extract_y_axis_values(df_pos,selectData['points'][sd]['text'],'pos',rate_val,'up',start_index,end_index).astype(float),
               mode = 'markers',
@@ -1681,7 +1681,7 @@ def update_coord_series(selected_dropdown_value,values,ref,selected_range,select
 
           y_east_sd = extract_y_axis_values(df_pos,rec,'pos',rate_val,'east',start_index,end_index).astype(float)
           y_east_ref = extract_y_axis_values(df_pos,ref,'pos',rate_val,'east',start_index,end_index).astype(float)
-          fig_coord.append_trace(go.Scatter(
+          fig_coord.append_trace(go.Scattergl(
               x = extract_x_axis_values(df_pos,rec,'pos',rate_val,'date',start_index,end_index),
               y = y_east_sd - y_east_sd.median() - y_east_ref + y_east_ref.median(),
              mode = 'markers',
@@ -1690,7 +1690,7 @@ def update_coord_series(selected_dropdown_value,values,ref,selected_range,select
           # NORTH
           y_north_sd = extract_y_axis_values(df_pos,rec,'pos',rate_val,'north',start_index,end_index).astype(float)
           y_north_ref = extract_y_axis_values(df_pos,ref,'pos',rate_val,'north',start_index,end_index).astype(float)
-          fig_coord.append_trace(go.Scatter(
+          fig_coord.append_trace(go.Scattergl(
               x = extract_x_axis_values(df_pos,rec,'pos',rate_val,'date',start_index,end_index),
               y = y_north_sd - y_north_sd.median() - y_north_ref + y_north_ref.median(),
               mode = 'markers',
@@ -1699,7 +1699,7 @@ def update_coord_series(selected_dropdown_value,values,ref,selected_range,select
           # UP
           y_up_sd = extract_y_axis_values(df_pos,rec,'pos',rate_val,'up',start_index,end_index).astype(float)
           y_up_ref = extract_y_axis_values(df_pos,ref,'pos',rate_val,'up',start_index,end_index).astype(float)
-          fig_coord.append_trace(go.Scatter(
+          fig_coord.append_trace(go.Scattergl(
               x = extract_x_axis_values(df_pos,rec,'pos',rate_val,'date',start_index,end_index),
               y = y_up_sd - y_up_sd.median() - y_up_ref + y_up_ref.median(),
               mode = 'markers',
@@ -1711,7 +1711,7 @@ def update_coord_series(selected_dropdown_value,values,ref,selected_range,select
           # EAST
           y_east_sd = extract_y_axis_values(df_pos,rec,'pos',rate_val,'east',start_index,end_index).astype(float)
           y_east_ref = extract_y_axis_values(df_pos,ref,'pos',rate_val,'east',start_index,end_index).astype(float)
-          fig_coord.append_trace(go.Scatter(
+          fig_coord.append_trace(go.Scattergl(
               x = extract_x_axis_values(df_pos,rec,'pos',rate_val,'date',start_index,end_index),
               y = y_east_sd - y_east_ref ,
               mode = 'markers',
@@ -1720,7 +1720,7 @@ def update_coord_series(selected_dropdown_value,values,ref,selected_range,select
           # NORTH
           y_north_sd = extract_y_axis_values(df_pos,rec,'pos',rate_val,'north',start_index,end_index).astype(float)
           y_north_ref = extract_y_axis_values(df_pos,ref,'pos',rate_val,'north',start_index,end_index).astype(float)
-          fig_coord.append_trace(go.Scatter(
+          fig_coord.append_trace(go.Scattergl(
               x = extract_x_axis_values(df_pos,rec,'pos',rate_val,'date',start_index,end_index),
               y = y_north_sd - y_north_ref ,
               mode = 'markers',
@@ -1729,7 +1729,7 @@ def update_coord_series(selected_dropdown_value,values,ref,selected_range,select
           # UP
           y_up_sd = extract_y_axis_values(df_pos,rec,'pos',rate_val,'up',start_index,end_index).astype(float)
           y_up_ref = extract_y_axis_values(df_pos,ref,'pos',rate_val,'up',start_index,end_index).astype(float)
-          fig_coord.append_trace(go.Scatter(
+          fig_coord.append_trace(go.Scattergl(
               x = extract_x_axis_values(df_pos,rec,'pos',rate_val,'date',start_index,end_index),
               y = y_up_sd  - y_up_ref ,
               mode = 'markers',
@@ -1742,7 +1742,7 @@ def update_coord_series(selected_dropdown_value,values,ref,selected_range,select
         if 'True' in values:
           # EAST
           y_east_sd = extract_y_axis_values(df_pos,rec,'pos',rate_val,'east',start_index,end_index).astype(float)
-          fig_coord.append_trace(go.Scatter(
+          fig_coord.append_trace(go.Scattergl(
               x = extract_x_axis_values(df_pos,rec,'pos',rate_val,'date',start_index,end_index),
               y = y_east_sd - y_east_sd.median() ,
               mode = 'markers',
@@ -1750,7 +1750,7 @@ def update_coord_series(selected_dropdown_value,values,ref,selected_range,select
             ), 1, 1)
           # NORTH
           y_north_sd = extract_y_axis_values(df_pos,rec,'pos',rate_val,'north',start_index,end_index).astype(float)
-          fig_coord.append_trace(go.Scatter(
+          fig_coord.append_trace(go.Scattergl(
               x = extract_x_axis_values(df_pos,rec,'pos',rate_val,'date',start_index,end_index),
               y = y_north_sd - y_north_sd.median() ,
               mode = 'markers',
@@ -1759,7 +1759,7 @@ def update_coord_series(selected_dropdown_value,values,ref,selected_range,select
             ), 2, 1)
           # UP
           y_up_sd = extract_y_axis_values(df_pos,rec,'pos',rate_val,'up',start_index,end_index).astype(float)
-          fig_coord.append_trace(go.Scatter(
+          fig_coord.append_trace(go.Scattergl(
               x = extract_x_axis_values(df_pos,rec,'pos',rate_val,'date',start_index,end_index),
               y = y_up_sd - y_up_sd.median() ,
               mode = 'markers',
@@ -1768,14 +1768,14 @@ def update_coord_series(selected_dropdown_value,values,ref,selected_range,select
         # If remove median not selected
         else:
           # EAST
-          fig_coord.append_trace(go.Scatter(
+          fig_coord.append_trace(go.Scattergl(
               x = extract_x_axis_values(df_pos,rec,'pos',rate_val,'date',start_index,end_index),
               y = extract_y_axis_values(df_pos,rec,'pos',rate_val,'east',start_index,end_index).astype(float),
               mode = 'markers',
               name = "%s"%rec+" "+"EAST"
             ), 1, 1)
           # NORTH
-          fig_coord.append_trace(go.Scatter(
+          fig_coord.append_trace(go.Scattergl(
               x = extract_x_axis_values(df_pos,rec,'pos',rate_val,'date',start_index,end_index),
               y = extract_y_axis_values(df_pos,rec,'pos',rate_val,'north',start_index,end_index).astype(float),
               mode = 'markers',
@@ -1783,7 +1783,7 @@ def update_coord_series(selected_dropdown_value,values,ref,selected_range,select
 
             ), 2, 1)
           # UP
-          fig_coord.append_trace(go.Scatter(
+          fig_coord.append_trace(go.Scattergl(
               x = extract_x_axis_values(df_pos,rec,'pos',rate_val,'date',start_index,end_index),
               y = extract_y_axis_values(df_pos,rec,'pos',rate_val,'up',start_index,end_index).astype(float),
               mode = 'markers',

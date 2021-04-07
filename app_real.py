@@ -68,6 +68,9 @@ df_tropo= {"%s"%receivers[0]+"_"+tf+'_'+str(300): pd.read_sql_query(""" select e
     """,engine,params=(300,300,tf,receivers[0]))for tf in types }
 
 for key in df_tropo.items():
+  df_tropo[key[0]]= df_tropo[key[0]].drop_duplicates(subset=['epoch_time'], keep='last')
+  
+for key in df_tropo.items():  
   df_tropo[key[0]]['date']=pd.to_datetime(df_tropo[key[0]]['epoch_time'],unit='s')
   
   
@@ -89,6 +92,8 @@ def get_db (menu_list,rate_val):
           and troposet.id_result=(select id_result from ggm where short_name_4ch=%s ) ) order by epoch_time
           """,engine,params=(rate_val,rate_val,tf,selected_dv)) for tf in types}
         for key in df_update.items():
+          df_update[key[0]]= df_update[key[0]].drop_duplicates(subset=['epoch_time'], keep='last')
+        for key in df_update.items():
           df_update[key[0]]['date'] = pd.to_datetime(df_update[key[0]]['epoch_time'], unit='s')
         df_tropo.update(df_update)
       else:
@@ -97,6 +102,8 @@ def get_db (menu_list,rate_val):
           where type= %s
           and troposet.id_result=(select id_result from ggm where short_name_4ch=%s ) ) order by epoch_time
           """,engine,params=(rate_val,rate_val,tf,selected_dv)) for tf in types}
+        for key in df_update.items():
+          df_update[key[0]]= df_update[key[0]].drop_duplicates(subset=['epoch_time'], keep='last')
         for key in df_update.items():
           df_update[key[0]]['date'] = pd.to_datetime(df_update[key[0]]['epoch_time'], unit='s')
         df_tropo.update(df_update)        
@@ -120,6 +127,8 @@ def get_db_points (selectData,rate_val):
           and troposet.id_result=(select id_result from ggm where short_name_4ch=%s ) ) order by epoch_time
           """,engine,params=(rate_val,rate_val,tf,selectData['points'][sd]['text'])) for tf in types}
         for key in df_update.items():
+          df_update[key[0]]= df_update[key[0]].drop_duplicates(subset=['epoch_time'], keep='last')
+        for key in df_update.items():
           df_update[key[0]]['date'] = pd.to_datetime(df_update[key[0]]['epoch_time'], unit='s')
         df_tropo.update(df_update)
       else:
@@ -128,6 +137,8 @@ def get_db_points (selectData,rate_val):
           where type= %s
           and troposet.id_result=(select id_result from ggm where short_name_4ch=%s ) ) order by epoch_time
           """,engine,params=(rate_val,rate_val,tf,selectData['points'][sd]['text'])) for tf in types}
+        for key in df_update.items():
+          df_update[key[0]]= df_update[key[0]].drop_duplicates(subset=['epoch_time'], keep='last')
         for key in df_update.items():
           df_update[key[0]]['date'] = pd.to_datetime(df_update[key[0]]['epoch_time'], unit='s')
         df_tropo.update(df_update)
@@ -144,6 +155,8 @@ df_pos = {"%s"%sn+"_pos_300": pd.read_sql_query(""" select * from gnssposition w
 end=time.time()
 print('pos extract  time is {}'.format( end-start))
 for key in df_pos.items():
+    df_pos[key[0]]= df_pos[key[0]].drop_duplicates(subset=['pos_time'], keep='last')
+for key in df_pos.items():
     df_pos[key[0]]['date']=pd.to_datetime(df_pos[key[0]]['pos_time'],unit='s')
 
 # Function to load from the db the receiver selected from the user based on rate value and add its dataframe the to the dictionary df_pos
@@ -153,6 +166,8 @@ def get_pos(rate_val):
     (select id_pos_table from positionset 
     where positionset.id_result=(select id_result from ggm where short_name_4ch=%s ) ) order by pos_time 
     """,engine,params=(sn,)) for sn in ggm_table['short_name_4ch'] }
+  for key in df_update_pos.items():
+    df_update_pos[key[0]]= df_update_pos[key[0]].drop_duplicates(subset=['pos_time'], keep='last')
   for key in df_update_pos.items():
     df_update_pos[key[0]]['date']=pd.to_datetime(df_update_pos[key[0]]['pos_time'],unit='s')
   df_pos.update(df_update_pos)

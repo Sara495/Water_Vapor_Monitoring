@@ -105,6 +105,7 @@ flag_tropo = []
 sol_id = []
 file_name = []
 
+
 # ID Counters
 s = 0
 n = 0 
@@ -296,7 +297,7 @@ for f in os.listdir(input_folder):
               type_field.append(tf)
               id_result_ts.append(id_result_same_rec)
               sol_id_troposet.append(s)
-  
+
                 # For each measurement
               for d in range(len(file['utc_time'])):
                 tmp_time = file['utc_time'][d,0]
@@ -368,7 +369,9 @@ for f in os.listdir(input_folder):
                           flag_tropo.append(1)
                     else:
                         flag_tropo.append(0)
-  
+              
+
+          
       
   
               
@@ -730,6 +733,8 @@ for f in os.listdir(input_folder):
           # Import_Parameters 
           sol_id = []
           file_name = []
+
+
   
   
   

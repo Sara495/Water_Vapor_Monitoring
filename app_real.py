@@ -27,7 +27,7 @@ from datetime import date
 from dash_extensions import Download
 import io
 from pathlib import Path
-
+from scipy import stats
 
 # DATA VISUALIZATION WITH RATES INTEGRATED
 
@@ -145,6 +145,8 @@ def get_db_points (selectData,rate_val):
         
   return(df_tropo)
 
+pos_col=['pos_x', 'pos_y', 'pos_z']
+
 # For each receiver extract position values at 5 minutes
 # In this case all the coord values together cause data are few
 start=time.time()
@@ -156,6 +158,9 @@ end=time.time()
 print('pos extract  time is {}'.format( end-start))
 for key in df_pos.items():
     df_pos[key[0]]= df_pos[key[0]].drop_duplicates(subset=['pos_time'], keep='last')
+for key in df_pos.items():
+    for i in pos_col:
+       df_pos[key[0]]=df_pos[key[0]][np.abs(stats.zscore(df_pos[key[0]][i])<3)]
 for key in df_pos.items():
     df_pos[key[0]]['date']=pd.to_datetime(df_pos[key[0]]['pos_time'],unit='s')
 

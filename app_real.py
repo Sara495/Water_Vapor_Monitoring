@@ -160,7 +160,7 @@ for key in df_pos.items():
     df_pos[key[0]]= df_pos[key[0]].drop_duplicates(subset=['pos_time'], keep='last')
 for key in df_pos.items():
     for i in pos_col:
-       df_pos[key[0]]=df_pos[key[0]][np.abs(stats.zscore(df_pos[key[0]][i])<3)]
+       df_pos[key[0]]=df_pos[key[0]][np.abs(stats.zscore(df_pos[key[0]][i])<2)]
 for key in df_pos.items():
     df_pos[key[0]]['date']=pd.to_datetime(df_pos[key[0]]['pos_time'],unit='s')
 
@@ -173,6 +173,9 @@ def get_pos(rate_val):
     """,engine,params=(sn,)) for sn in ggm_table['short_name_4ch'] }
   for key in df_update_pos.items():
     df_update_pos[key[0]]= df_update_pos[key[0]].drop_duplicates(subset=['pos_time'], keep='last')
+  for key in df_update_pos.items():
+    for i in pos_col:
+       df_update_pos[key[0]]=df_update_pos[key[0]][np.abs(stats.zscore(df_update_pos[key[0]][i])<2)]
   for key in df_update_pos.items():
     df_update_pos[key[0]]['date']=pd.to_datetime(df_update_pos[key[0]]['pos_time'],unit='s')
   df_pos.update(df_update_pos)

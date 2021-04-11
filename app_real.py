@@ -89,7 +89,7 @@ def get_db (menu_list,rate_val):
           (select id_tropo_table from troposet 
           where type= %s
           and troposet.id_result=(select id_result from ggm where short_name_4ch=%s ) ) order by epoch_time
-          """,engine,params=(rate_val,rate_val,tf,selected_dv)) for tf in types}
+          """,engine,params=(tf,selected_dv)) for tf in types}
         for key in df_update.items():
           df_update[key[0]]= df_update[key[0]].drop_duplicates(subset=['epoch_time'], keep='last')
         for key in df_update.items():
@@ -124,7 +124,7 @@ def get_db_points (selectData,rate_val):
           (select id_tropo_table from troposet 
           where type= %s
           and troposet.id_result=(select id_result from ggm where short_name_4ch=%s ) ) order by epoch_time
-          """,engine,params=(rate_val,rate_val,tf,selectData['points'][sd]['text'])) for tf in types}
+          """,engine,params=(tf,selectData['points'][sd]['text'])) for tf in types}
         for key in df_update.items():
           df_update[key[0]]= df_update[key[0]].drop_duplicates(subset=['epoch_time'], keep='last')
         for key in df_update.items():

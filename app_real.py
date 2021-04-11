@@ -69,6 +69,7 @@ df_tropo= {"%s"%receivers[0]+"_"+tf+'_'+str(300): pd.read_sql_query(""" select e
 
 for key in df_tropo.items():
   df_tropo[key[0]]= df_tropo[key[0]].drop_duplicates(subset=['epoch_time'], keep='last')  
+for key in df_tropo.items():
   df_tropo[key[0]]['date']=pd.to_datetime(df_tropo[key[0]]['epoch_time'],unit='s')
   
   
@@ -84,13 +85,14 @@ def get_db (menu_list,rate_val):
       print('already imported {}'.format(selected_dv+'_'+str(rate_val)))
     else:
       if rate_val !=1:         
-        df_update= {"%s"%selected_dv+"_"+tf+'_'+str(rate_val): pd.read_sql_query(""" select epoch_time, data_val ,flag_tropo from gnsstropo where flag_tropo=0  and epoch_time-floor(epoch_time/%s)*%s=12  and id_tropo_table in 
+        df_update= {"%s"%selected_dv+"_"+tf+'_'+str(rate_val): pd.read_sql_query(""" select epoch_time, data_val ,flag_tropo from gnsstropo where flag_tropo=0   and id_tropo_table in 
           (select id_tropo_table from troposet 
           where type= %s
           and troposet.id_result=(select id_result from ggm where short_name_4ch=%s ) ) order by epoch_time
           """,engine,params=(rate_val,rate_val,tf,selected_dv)) for tf in types}
         for key in df_update.items():
           df_update[key[0]]= df_update[key[0]].drop_duplicates(subset=['epoch_time'], keep='last')
+        for key in df_update.items():
           df_update[key[0]]['date'] = pd.to_datetime(df_update[key[0]]['epoch_time'], unit='s')
         df_tropo.update(df_update)
       else:
@@ -101,6 +103,7 @@ def get_db (menu_list,rate_val):
           """,engine,params=(rate_val,rate_val,tf,selected_dv)) for tf in types}
         for key in df_update.items():
           df_update[key[0]]= df_update[key[0]].drop_duplicates(subset=['epoch_time'], keep='last')
+        for key in df_update.items():
           df_update[key[0]]['date'] = pd.to_datetime(df_update[key[0]]['epoch_time'], unit='s')
         df_tropo.update(df_update)        
         
@@ -117,13 +120,14 @@ def get_db_points (selectData,rate_val):
       print('already imported')
     else:
       if rate_val !=1:
-        df_update= {"%s"%selectData['points'][sd]['text']+"_"+tf+'_'+str(rate_val): pd.read_sql_query(""" select epoch_time, data_val, flag_tropo from gnsstropo where flag_tropo=0 and epoch_time-floor(epoch_time/%s)*%s=12  and id_tropo_table in 
+        df_update= {"%s"%selectData['points'][sd]['text']+"_"+tf+'_'+str(rate_val): pd.read_sql_query(""" select epoch_time, data_val, flag_tropo from gnsstropo where flag_tropo=0  and id_tropo_table in 
           (select id_tropo_table from troposet 
           where type= %s
           and troposet.id_result=(select id_result from ggm where short_name_4ch=%s ) ) order by epoch_time
           """,engine,params=(rate_val,rate_val,tf,selectData['points'][sd]['text'])) for tf in types}
         for key in df_update.items():
           df_update[key[0]]= df_update[key[0]].drop_duplicates(subset=['epoch_time'], keep='last')
+        for key in df_update.items():
           df_update[key[0]]['date'] = pd.to_datetime(df_update[key[0]]['epoch_time'], unit='s')
         df_tropo.update(df_update)
       else:
@@ -134,6 +138,7 @@ def get_db_points (selectData,rate_val):
           """,engine,params=(rate_val,rate_val,tf,selectData['points'][sd]['text'])) for tf in types}
         for key in df_update.items():
           df_update[key[0]]= df_update[key[0]].drop_duplicates(subset=['epoch_time'], keep='last')
+        for key in df_update.items():
           df_update[key[0]]['date'] = pd.to_datetime(df_update[key[0]]['epoch_time'], unit='s')
         df_tropo.update(df_update)
         
@@ -152,9 +157,10 @@ end=time.time()
 print('pos extract  time is {}'.format( end-start))
 for key in df_pos.items():
   df_pos[key[0]]= df_pos[key[0]].drop_duplicates(subset=['pos_time'], keep='last')
-  df_pos[key[0]]['date']=pd.to_datetime(df_pos[key[0]]['pos_time'],unit='s')
   for i in pos_col:
     df_pos[key[0]]=df_pos[key[0]][np.abs(stats.zscore(df_pos[key[0]][i])<2)]
+for key in df_pos.items():
+  df_pos[key[0]]['date']=pd.to_datetime(df_pos[key[0]]['pos_time'],unit='s')
 
   
 
@@ -167,9 +173,10 @@ def get_pos(rate_val):
     """,engine,params=(sn,)) for sn in ggm_table['short_name_4ch'] }
   for key in df_update_pos.items():
     df_update_pos[key[0]]= df_update_pos[key[0]].drop_duplicates(subset=['pos_time'], keep='last')
-    df_update_pos[key[0]]['date']=pd.to_datetime(df_update_pos[key[0]]['pos_time'],unit='s')
     for i in pos_col:
-      df_update_pos[key[0]]=df_update_pos[key[0]][np.abs(stats.zscore(df_update_pos[key[0]][i])<2)]  
+      df_update_pos[key[0]]=df_update_pos[key[0]][np.abs(stats.zscore(df_update_pos[key[0]][i])<2)]
+  for key in df_update_pos.items():
+    df_update_pos[key[0]]['date']=pd.to_datetime(df_update_pos[key[0]]['pos_time'],unit='s')  
   df_pos.update(df_update_pos)
   return(df_pos)
 end=time.time()
@@ -1940,7 +1947,7 @@ def generate_csv(d_rec, d_param, d_timestamp, d_start_date, d_end_date, n_clicks
           arg_t='1'
         print('the d_rec has value {}'.format(d_rec))  
         for i in d_rec:
-          arg_r=str(i)
+          arg_r="%s"%i
           print('the i has value {}'.format(i))  
           for a in d_param:
             arg_p=a

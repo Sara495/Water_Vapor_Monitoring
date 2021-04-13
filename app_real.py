@@ -897,7 +897,7 @@ def update_pwv_series(selected_dropdown_value,selected_range,selectData,rate_val
           x = extract_x_axis_values(df_tropo,selectData['points'][sd]['text'],'PWV',rate_val,'date',start_index,end_index),
           y = (extract_y_axis_values(df_tropo,selectData['points'][sd]['text'],'PWV',rate_val,'data_val',start_index,end_index).astype(float))*1000,
           mode= 'markers',
-          name= "%s"%selectData['points'][sd]['text']+"_ZHD"
+          name= "%s"%selectData['points'][sd]['text']+"_PWV"
         ))
     figure_pwv={
       'data': trace_pwv,
@@ -984,7 +984,7 @@ def update_pwv_series(selected_dropdown_value,selected_range,selectData,rate_val
           x = extract_x_axis_values(df_tropo,rec,'PWV',rate_val,'date',start_index,end_index),
           y = (extract_y_axis_values(df_tropo,rec,'PWV',rate_val,'data_val',start_index,end_index).astype(float))*1000,
           mode= 'markers',
-          name= "%s"%rec+"_ZHD"
+          name= "%s"%rec+"_PWV"
         ))
     figure_pwv={
       'data': trace_pwv,

@@ -157,8 +157,15 @@ end=time.time()
 print('pos extract  time is {}'.format( end-start))
 for key in df_pos.items():
   df_pos[key[0]]= df_pos[key[0]].drop_duplicates(subset=['pos_time'], keep='last')
+for key in df_pos.items():
+  d=pd.DataFrame()
+  d=df_pos[key[0]].copy()
   for i in pos_col:
-    df_pos[key[0]]=df_pos[key[0]][np.abs(stats.zscore(df_pos[key[0]][i])<2)]
+    z_scores = stats.zscore(d[i])
+    abs_z_scores = np.abs(z_scores)
+    filtered_entries = abs_z_scores < 3
+    d = d[filtered_entries]
+  df_pos[key[0]]=d
 for key in df_pos.items():
   df_pos[key[0]]['date']=pd.to_datetime(df_pos[key[0]]['pos_time'],unit='s')
 

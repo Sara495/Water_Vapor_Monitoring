@@ -1,1 +1,0 @@
-dbname=db user=postgres password=user
